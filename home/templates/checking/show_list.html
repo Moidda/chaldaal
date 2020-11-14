@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+        <meta charset = "UTF-8">
+        <title>Products</title>
+</head>
+<body>
+    <h1>Product</h1>
+    <table width = "100%" border = "1">
+        <tr style = "background-color:lightgray">
+            <th>Product_id</th>
+            <th>Name</th>
+            <th>Unit</th>
+            <th>In stock</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Rating</th>
+        </tr>
+
+        {% for p in product %}
+            <tr>
+                <td>{{p.product_id}}</td>
+                <td>{{p.product_name}}</td>
+                <td>{{p.unit}}</td>
+                <td>{{p.units_in_stock}}</td>
+                <td>{{p.price_per_unit}}</td>
+                <td>{{p.category}}</td>
+                <td>{{p.rating_by_customer}}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+</body>
+</html>
