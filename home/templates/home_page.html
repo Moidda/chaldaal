@@ -3,13 +3,35 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <p>HOME_PAGE</p>
-    <p> {{ customer_id }} </p>
-    <p> {{ customer_name }} </p>
-    <p> {{ street_no }} </p>
-    <p> {{ house_no }} </p>
-    <p> {{ apt_no }} </p>
-    <p> {{ email }} </p>
-    <p> {{ customer_credit }} </p>
-    <p> {{ password }} </p>
+    <p><h4>Our Products</h4></p>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Unit</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Sub category</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in product %}
+                    <tr>
+                        <td>{{p.product_id}}</td>
+                        <td>{{p.product_name}}</td>
+                        <td>{{p.unit}}</td>
+                        <td>{{p.units_in_stock}}</td>
+                        <td>{{p.price_per_unit}}</td>
+                        <td>{{p.category}}</td>
+                        <td>{{p.sub_category}}</td>
+                        <td>{{p.rating_by_customer}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
