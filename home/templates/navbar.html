@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="http://127.0.0.1:8000">Chaldaal</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -14,7 +14,7 @@
 
   <form class="form-inline" method="POST" action="http://127.0.0.1:8000/searched/">
     {% csrf_token %}
-    <input class="form-control mr-sm-2" type="search" name="searched" placeholder="Search" aria-label="Search">
+    <input class="form-control mr-sm-2" type="search" name="searched" minlength="3" placeholder="Search" aria-label="Search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
   </form>
 </nav>

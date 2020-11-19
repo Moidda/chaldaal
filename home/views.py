@@ -45,3 +45,10 @@ def searched(request):
         searched_item = searched_item.lower()
         request.session['searched_item'] = searched_item
         return redirect(home_page)
+
+
+def cart_func(request, product_id):
+    print('cart_func() called from button')
+    print('product_id = ' + str(product_id))
+    return redirect(home_page)
+

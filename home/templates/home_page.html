@@ -3,6 +3,7 @@
 {% extends 'main.html' %}
 
 {% block content %}
+
     <p><h4>Our Products</h4></p>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
@@ -16,6 +17,7 @@
                     <th>Category</th>
                     <th>Sub category</th>
                     <th>Rating</th>
+                    <th>Add/Remove</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +31,12 @@
                         <td>{{p.category}}</td>
                         <td>{{p.sub_category}}</td>
                         <td>{{p.rating_by_customer}}</td>
+                        <td>
+                            <form method="POST" action="cart_func/{{ p.product_id }}/">
+                                {% csrf_token %}
+                                <input type="submit" class="buttonAdd" value="+" name/>
+                            </form>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
