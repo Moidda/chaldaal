@@ -1,0 +1,55 @@
+<!-- write main.html -->
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+    <p><h4>Your cart</h4></p>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Unit</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th>To Pay</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in product %}
+                    <tr>
+                        <td id="pid">{{p.product_id}}</td>
+                        <td>{{p.product_name}}</td>
+                        <td>{{p.unit}}</td>
+                        <td>{{p.price_per_unit}}</td>
+                        <td>{{p.amount}}</td>
+                        <td>{{p.to_pay}}</td>
+                        <td>
+                            <input type="button" class="buttonAdd" id="buttonAdd" value="+" onclick="increase_item({{p.product_id}})" />
+                            <input type="button" class="buttonMinus" id="buttonMinus" value="-" onclick="decrease_item({{p.product_id}})" />
+                            <input type="button" class="buttonMinus" id="buttonMinus" value="x" onclick="erase_item({{p.product_id}})" />
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <p><h5>Total Price: {{ total_price }}</h5></p>
+
+    <script language="JavaScript">
+        function increase_item(pid){
+            window.location.href = "increase_item/" + pid + "/";
+        }
+        function decrease_item(pid){
+            window.location.href = "decrease_item/" + pid + "/";
+        }
+        function erase_item(pid){
+            window.location.href = "erase_item/" + pid + "/";
+        }
+    </script>
+
+{% endblock %}

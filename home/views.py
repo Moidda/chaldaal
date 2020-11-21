@@ -47,8 +47,3 @@ def searched(request):
         return redirect(home_page)
 
 
-def cart_func(request, product_id):
-    print('cart_func() called from button')
-    print('product_id = ' + str(product_id))
-    return redirect(home_page)
-

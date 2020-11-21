@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'home',
     'register',
     'kumpir',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -76,13 +77,6 @@ WSGI_APPLICATION = 'chaldaal.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 DATABASES = {
     'default':{
@@ -138,3 +132,4 @@ STATIC_URL = '/static/'
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_HTTPONLY = True
+SESSION_SAVE_EVERY_REQUEST = True

@@ -124,6 +124,17 @@ def get_customer_info_sql(user_email):
     return ret[0]
 
 
+def create_session(request, result):
+    request.session['customer_id'] = result[0]
+    request.session['customer_name'] = result[1]
+    request.session['street_no'] = result[2]
+    request.session['house_no'] = result[3]
+    request.session['apt_no'] = result[4]
+    request.session['email'] = result[5]
+    request.session['customer_credit'] = result[6]
+    request.session['password'] = result[7]
+
+
 def log_in_verification(request):
     if request.method == 'POST':
         response = redirect('http://127.0.0.1:8000/')
@@ -158,20 +169,9 @@ def log_in_verification(request):
             context['try_again_link'] = "http://127.0.0.1:8000/log_in/"
             return render(request, 'error.html', context)
 
-        print("log in successful")
-
         # set session here
         result = get_customer_info_sql(user_email)
-        request.session['customer_id'] = result[0]
-        request.session['customer_name'] = result[1]
-        request.session['street_no'] = result[2]
-        request.session['house_no'] = result[3]
-        request.session['apt_no'] = result[4]
-        request.session['email'] = result[5]
-        request.session['customer_credit'] = result[6]
-        request.session['password'] = result[7]
-
-        print("session created")
+        create_session(request, result)
 
         return response
 

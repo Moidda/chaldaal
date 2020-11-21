@@ -17,7 +17,7 @@
                     <th>Category</th>
                     <th>Sub category</th>
                     <th>Rating</th>
-                    <th>Add/Remove</th>
+                    <th>Add to Cart</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@
                         <td>{{p.sub_category}}</td>
                         <td>{{p.rating_by_customer}}</td>
                         <td>
-                            <form method="POST" action="cart_func/{{ p.product_id }}/">
+                            <form method="POST" action="cart/add_item/{{ p.product_id }}/">
                                 {% csrf_token %}
                                 <input type="submit" class="buttonAdd" value="+" name/>
                             </form>
