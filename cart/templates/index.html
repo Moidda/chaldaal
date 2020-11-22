@@ -28,9 +28,9 @@
                         <td>{{p.amount}}</td>
                         <td>{{p.to_pay}}</td>
                         <td>
-                            <input type="button" class="buttonAdd" id="buttonAdd" value="+" onclick="increase_item({{p.product_id}})" />
-                            <input type="button" class="buttonMinus" id="buttonMinus" value="-" onclick="decrease_item({{p.product_id}})" />
-                            <input type="button" class="buttonMinus" id="buttonMinus" value="x" onclick="erase_item({{p.product_id}})" />
+                            <input type="button" class="buttonAdd" id="buttonAdd" value="+" data-pid="{{p.product_id}}"/>
+                            <input type="button" class="buttonMinus" id="buttonMinus" value="-" data-pid="{{p.product_id}}"/>
+                            <input type="button" class="buttonMinus" id="buttonErase" value="x" data-pid="{{p.product_id}}"/>
                         </td>
                     </tr>
                 {% endfor %}
@@ -40,16 +40,9 @@
 
     <p><h5>Total Price: {{ total_price }}</h5></p>
 
-    <script language="JavaScript">
-        function increase_item(pid){
-            window.location.href = "increase_item/" + pid + "/";
-        }
-        function decrease_item(pid){
-            window.location.href = "decrease_item/" + pid + "/";
-        }
-        function erase_item(pid){
-            window.location.href = "erase_item/" + pid + "/";
-        }
-    </script>
+    
+
+    {% load static %}
+    <script language="JavaScript" src="{% static 'js/buttons.js' %}"></script>
 
 {% endblock %}

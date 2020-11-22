@@ -48,7 +48,7 @@ def erase_item(request, product_id):
     return redirect('http://127.0.0.1:8000/cart/')
 
 
-def show_cart(request):
+def index(request):
     if 'email' not in request.session:
         return redirect('http://127.0.0.1:8000/log_in')
 
@@ -77,5 +77,5 @@ def show_cart(request):
         })
         total_price += amount*price_per_unit
 
-    return render(request, 'cart.html', {'product': table, 'total_price': total_price})
+    return render(request, 'index.html', {'product': table, 'total_price': total_price})
 
