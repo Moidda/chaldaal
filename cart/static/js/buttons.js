@@ -12,3 +12,7 @@ document.getElementById("buttonErase").addEventListener("click", function(){
     var pid = this.getAttribute("data-pid");
     window.location.href = "erase_item/" + pid + "/";
 });
+
+document.getElementById("placeOrder").addEventListener("click", function(){
+    window.location.href = "checkout/";
+});

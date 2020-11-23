@@ -14,7 +14,7 @@ cursor = connection.cursor()
 # the url 'cart/add_item/<product_id>' is called from home_page.html
 def add_item(request, product_id):
     if 'email' not in request.session:
-        return redirect('http://127.0.0.1:8000/log_in')
+        return redirect(home_page)
 
     cart.add_product(product_id)
     for p, c in cart.products.items():
@@ -25,7 +25,7 @@ def add_item(request, product_id):
 # increase an item from the cart page
 def increase_item(request, product_id):
     if 'email' not in request.session:
-        return redirect('http://127.0.0.1:8000/log_in')
+        return redirect(home_page)
 
     cart.add_product(product_id)
     return redirect('http://127.0.0.1:8000/cart/')
@@ -34,7 +34,7 @@ def increase_item(request, product_id):
 # decrease an item from the cart page
 def decrease_item(request, product_id):
     if 'email' not in request.session:
-        return redirect('http://127.0.0.1:8000/log_in')
+        return redirect(home_page)
 
     cart.remove_product(product_id)
     return redirect('http://127.0.0.1:8000/cart/')
@@ -43,14 +43,14 @@ def decrease_item(request, product_id):
 # erases a product from the cart
 def erase_item(request, product_id):
     if 'email' not in request.session:
-        return redirect('http://127.0.0.1:8000/log_in')
+        return redirect(home_page)
     cart.erase_product(product_id)
     return redirect('http://127.0.0.1:8000/cart/')
 
 
 def index(request):
     if 'email' not in request.session:
-        return redirect('http://127.0.0.1:8000/log_in')
+        return redirect(home_page)
 
     table = []
     total_price = 0
@@ -78,4 +78,14 @@ def index(request):
         total_price += amount*price_per_unit
 
     return render(request, 'index.html', {'product': table, 'total_price': total_price})
+
+
+def checkout(request):
+    if 'email' not in request.session:
+        return redirect(home_page)
+    return render(request, 'checkout.html')
+
+
+def confirm_checkout(request):
+    return HttpResponse("Your order has been placed")
 
