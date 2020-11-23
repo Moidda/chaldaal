@@ -12,17 +12,17 @@ RETURN VARCHAR IS
 	RET VARCHAR(100);
 BEGIN
 	
-	IF NAME = '' THEN
+	IF NAME IS NULL THEN
 		RET := 'Please provide your full name';
-	ELSIF SNO = '' THEN
+	ELSIF SNO IS NULL THEN
 		RET := 'Please provide a street no';
-	ELSIF HNO = '' THEN
+	ELSIF HNO IS NULL THEN
 		RET := 'Please provide a house no';
-	ELSIF ANO = '' THEN
+	ELSIF ANO IS NULL THEN
 		RET := 'Please provide an apt no. If you can not provide an apt no, type in default';
-	ELSIF MAIL = '' THEN
+	ELSIF MAIL IS NULL THEN
 		RET := 'Please provide an email';
-	ELSIF PASSWORD1 = '' THEN
+	ELSIF PASSWORD1 IS NULL THEN
 		RET := 'Password cannot be empty';
 	ELSIF PASSWORD1 <> PASSWORD2 THEN
 		RET := 'Could not confirm password';

@@ -40,33 +40,6 @@ def sign_up_verification(request):
         return redirect('http://127.0.0.1:8000/')
 
 
-def check_mail_sql(user_email):
-    email_found = False
-    cursor = connection.cursor()
-    sql = 'SELECT EMAIL FROM CUSTOMER'
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    for row in result:
-        customer_email_in_db = row[0]
-        if user_email == customer_email_in_db:
-            email_found = True
-    cursor.close()
-    return email_found
-
-
-def get_customer_pass_sql(user_email):
-    cursor = connection.cursor()
-    sql = '''
-                SELECT PASSWORD
-                FROM CUSTOMER
-                WHERE EMAIL = %s
-    '''
-    cursor.execute(sql, [user_email])
-    result = cursor.fetchall()
-    cursor.close()
-    return result[0][0]
-
-
 def get_customer_info_sql(user_email):
     cursor = connection.cursor()
     sql = 'SELECT * FROM CUSTOMER WHERE EMAIL LIKE %s'
@@ -89,43 +62,20 @@ def create_session(request, result):
 
 def log_in_verification(request):
     if request.method == 'POST':
-        response = redirect('http://127.0.0.1:8000/')
-
-        # retrieve user input from web page
         user_email = str(request.POST.get("user_email"))
         user_pass = str(request.POST.get("user_pass"))
 
-        if user_email == '':
-            error_context = {}
-            error_context['error_message'] = 'Please Enter your email'
-            error_context['try_again_link'] = "http://127.0.0.1:8000/log_in/"
+        cursor = connection.cursor()
+        error_context = {}
+        error_context['try_again_link'] = "http://127.0.0.1:8000/log_in/"
+        error_context['error_message'] = cursor.callfunc("IS_VALID_LOG_IN", str, [user_email, user_pass])
+
+        if error_context['error_message'] != 'VALID':
             return render(request, 'error.html', error_context)
 
-        if user_pass == '':
-            error_context = {}
-            error_context['error_message'] = 'Incorrect Password'
-            error_context['try_again_link'] = "http://127.0.0.1:8000/log_in/"
-            return render(request, 'error.html', error_context)
+        create_session(request, get_customer_info_sql(user_email))
 
-        email_found = check_mail_sql(user_email)
-        if not email_found:
-            context = {}
-            context['error_message'] = "Email not found"
-            context['try_again_link'] = "http://127.0.0.1:8000/log_in/"
-            return render(request, 'error.html', context)
-
-        customer_pass_in_db = get_customer_pass_sql(user_email)
-        if user_pass != customer_pass_in_db:
-            context = {}
-            context['error_message'] = "Incorrect Password"
-            context['try_again_link'] = "http://127.0.0.1:8000/log_in/"
-            return render(request, 'error.html', context)
-
-        # set session here
-        result = get_customer_info_sql(user_email)
-        create_session(request, result)
-
-        return response
+        return redirect('http://127.0.0.1:8000/')
 
 
 def log_out(request):

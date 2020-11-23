@@ -1,0 +1,50 @@
+CREATE OR REPLACE FUNCTION IS_VALID_LOG_IN
+(
+	MAIL	IN	VARCHAR,
+	PASS 	IN 	VARCHAR
+)
+
+RETURN VARCHAR IS 
+
+	MSG 		VARCHAR(100);
+	EMAIL_FOUND BOOLEAN;
+	PASS2 		VARCHAR(100);
+
+BEGIN
+	
+	MSG := 'VALID';
+
+	IF MAIL IS NULL THEN
+		MSG := 'Please enter your email';
+	ELSIF PASS IS NULL THEN
+		MSG := 'Incorrect password';
+	END IF;
+	
+	EMAIL_FOUND := FALSE;
+	FOR R IN (SELECT EMAIL FROM CUSTOMER)
+	LOOP
+		IF R.EMAIL = MAIL THEN
+			EMAIL_FOUND := TRUE;
+		END IF;
+	END LOOP;
+	
+	IF NOT EMAIL_FOUND THEN
+		MSG := 'Email not found';
+	END IF;
+	
+	SELECT PASSWORD INTO PASS2 FROM CUSTOMER WHERE EMAIL = MAIL;
+	IF PASS <> PASS2 THEN
+		MSG := 'Incorrect Password';
+	END IF;
+	
+	RETURN MSG;
+
+EXCEPTION
+	
+	WHEN NO_DATA_FOUND THEN
+		RETURN 'Email not found';
+	WHEN OTHERS THEN
+		RETURN 'An unknown error occured. Please try again. If persists, clear your browser cookie/history';
+	
+END;
+/
