@@ -26,64 +26,16 @@ def sign_up_verification(request):
         password1 = str(request.POST.get("password1"))
         password2 = str(request.POST.get("password2"))
 
-        #validity checking
         error_context = {}
         error_context['try_again_link'] = 'http://127.0.0.1:8000/sign_up/'
-        if customer_name == '':
-            error_context['error_message'] = 'Please provide a name'
-            return render(request, 'error.html', error_context)
-        if street_no == '':
-            error_context['error_message'] = 'Please provide a Street NO'
-            return render(request, 'error.html', error_context)
-        if house_no == '':
-            error_context['error_message'] = 'Please provide a house no'
-            return render(request, 'error.html', error_context)
-        if apt_no == '':
-            error_context['error_message'] = '''
-                Please provide an apt no.\n
-                If you can't provide an apt no, type in 'default'.
-            '''
-            return render(request, 'error.html', error_context)
-        if email == '':
-            error_context['error_message'] = 'Please provide an email'
-            return render(request, 'error.html', error_context)
-        if password1 == '':
-            error_context['error_message'] = 'Please provide a password'
-            return render(request, 'error.html', error_context)
-        if password1 != password2:
-            error_context['error_message'] = 'Could not confirm password'
-            return render(request, 'error.html', error_context)
-
-        # retrieve all email from customer table
         cursor = connection.cursor()
-        sql = 'SELECT EMAIL FROM CUSTOMER'
-        cursor.execute(sql)
-        result = cursor.fetchall()
+        args = [customer_name, street_no, house_no, apt_no, email, password1, password2]
+        error_context['error_message'] = cursor.callfunc("IS_VALID_SIGN_UP", str, args)
 
-        # check if email is already in use by another customer
-        for row in result:
-            customer_email_in_db = row[0]
-            if email == customer_email_in_db:
-                error_context['error_message'] = 'Email already in use'
-                return render(request, 'error.html', error_context)
+        if error_context['error_message'] != 'VALID':
+            return render(request, 'error.html', error_context)
 
-        # creating a unique id for the new customer (max_id + 1)
-        # this portion is probably redundant and can be handled in a better
-        # way using oracle itself
-        sql = 'SELECT MAX(CUSTOMER_ID) FROM CUSTOMER'
-        cursor.execute(sql)
-        result = cursor.fetchall()
-        max_id = int(result[0][0])
-        new_id = max_id+1
-
-        # inserting into database the information of the new user
-        sql = '''
-            INSERT INTO CUSTOMER
-            (CUSTOMER_ID, CUSTOMER_NAME, STREET_NO, HOUSE_NO, APT_NO, EMAIL, CUSTOMER_CREDIT, PASSWORD)
-            VALUES
-            (%s, %s, %s, %s, %s, %s, %s, %s)
-        '''
-        cursor.execute(sql, [new_id, customer_name, street_no, house_no, apt_no, email, 0, password1])
+        cursor.callproc("CREATE_CUSTOMER", args)
 
         return redirect('http://127.0.0.1:8000/')
 
