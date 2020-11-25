@@ -17,8 +17,6 @@ def add_item(request, product_id):
         return redirect(home_page)
 
     cart.add_product(product_id)
-    for p, c in cart.products.items():
-        print("Cart has " + str(c) + " no of " + str(p))
     return redirect(home_page)
 
 
@@ -83,9 +81,42 @@ def index(request):
 def checkout(request):
     if 'email' not in request.session:
         return redirect(home_page)
-    return render(request, 'checkout.html')
+    context = {
+        'customer_name': request.session['customer_name'],
+        'email': request.session['email'],
+        'street_no': request.session['street_no'],
+        'house_no': request.session['house_no'],
+        'apt_no': request.session['apt_no'],
+        'username': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['email'], 'USERNAME']),
+        'bank': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['email'], 'BANK']),
+        'card_type': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['email'], 'CARD_TYPE']),
+        'card_no': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['email'], 'CARD_NO']),
+        'bkash_phone_no': cursor.callfunc('GET_BKASH', str, [request.session['email'], 'PHONE_NO'])
+    }
+    return render(request, 'checkout.html', context)
 
 
 def confirm_checkout(request):
+    if 'email' not in request.session:
+        return redirect(home_page)
+    customer_name = str(request.POST.get("customer_name"))
+    email = str(request.POST.get("email"))
+    street_no = str(request.POST.get("street_no"))
+    house_no = str(request.POST.get("house_no"))
+    apt_no = str(request.POST.get("apt_no"))
+    username = str(request.POST.get("username"))
+    bank = str(request.POST.get("bank"))
+    card_type = str(request.POST.get("card_type"))
+    card_no = str(request.POST.get("card_no"))
+    bkash_phone_no = str(request.POST.get("bkash_phone_no"))
+    paymentMethod = str(request.POST.get("paymentMethod"))
+
+    ordar_no = (cursor.execute('SELECT MAX(ORDAR_NO) FROM ORDAR').fetchall())[0][0] + 1
+
+    for pid in cart.products:
+        cnt = cart.products[pid]
+        # args = [ordar_no, request.session["customer_id"], pid, cnt]
+        # cursor.callproc('CONFIRM_CHECKOUT', args)
+
     return HttpResponse("Your order has been placed")
 

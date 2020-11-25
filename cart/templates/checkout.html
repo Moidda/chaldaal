@@ -42,12 +42,13 @@
     }
     </style>
     <!-- Custom styles for this template -->
-    <link href="form-validation.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/4.5/examples/checkout/form-validation.css" rel="stylesheet">
 </head>
 
 <body class="bg-light">
 
     {% include 'navbar.html' %}
+    {% load static %}
 
     <div class="container">
         <div class="py-5 text-center">
@@ -55,6 +56,7 @@
             <h2>Checkout form</h2>
         </div>
 
+<!--    side cart    -->
         <div class="row">
             <div class="col-md-4 order-md-2 mb-4">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -93,15 +95,16 @@
                 </form>
             </div>
 
-<!--            start-->
+<!--            form -->
+<!--            action="{% url 'confirm_checkout' %}"-->
             <div class="col-md-8 order-md-1">
                 <h4 class="mb-3">Billing address</h4>
-                <form class="needs-validation" action="{% url 'confirm_checkout' %}" novalidate>
+                <form class="needs-validation" method="POST" id="checkout_form" action="{% url 'confirm_checkout' %}" novalidate>
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="username">User name <span class="text-muted">*</span> </label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="customer_name" name="customer_name" value="{{customer_name}}" required>
+                            <input type="text" class="form-control" id="customer_name" name="customer_name" value="{{customer_name}}" required/>
                             <div class="invalid-feedback" style="width: 100%;">
                                 Your username is required.
                             </div>
@@ -151,20 +154,19 @@
 
                     <div class="d-block my-3">
                         <div class="custom-control custom-radio">
-                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                            <input id="credit" name="paymentMethod" value="credit_card" type="radio" class="custom-control-input" checked required>
                             <label class="custom-control-label" for="credit">Credit card</label>
                         </div>
                         <div class="custom-control custom-radio">
-                            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+                            <input id="debit" name="paymentMethod" value="bkash" type="radio" class="custom-control-input" required>
                             <label class="custom-control-label" for="debit">Bkash</label>
                         </div>
                         <div class="custom-control custom-radio">
-                            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+                            <input id="paypal" name="paymentMethod" value="cash" type="radio" class="custom-control-input" required>
                             <label class="custom-control-label" for="paypal">Cash on delivery</label>
                         </div>
                     </div>
 
-<!--                    start-->
                     <h6 class="mb-3">Credit Card</h6>
 						<div class="row">
 							<div class="col-md-6 mb-3">
@@ -196,7 +198,7 @@
 						</div>
 
                     <hr class="mb-4">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                    <button class="btn btn-primary btn-lg btn-block" id="submit_btn" type="submit">Confirm Payment</button>
                 </form>
             </div>
         </div>
@@ -212,7 +214,8 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/docs/4.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <script src="form-validation.js"></script>
+    <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.5/dist/js/bootstrap.bundle.min.js"><\/script>')</script><script src="https://getbootstrap.com/docs/4.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="https://getbootstrap.com/docs/4.5/examples/checkout/form-validation.js"></script>
+    <script language="JavaScript" src="{% static 'js/checkout.js' %}"></script>
 </body>
 </html>

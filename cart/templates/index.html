@@ -4,6 +4,8 @@
 
 {% block content %}
 
+    {% load static %}
+
     <p><h4>Your cart</h4></p>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
@@ -28,9 +30,9 @@
                         <td>{{p.amount}}</td>
                         <td>{{p.to_pay}}</td>
                         <td>
-                            <input type="button" class="buttonAdd" id="buttonAdd" value="+" data-pid="{{p.product_id}}"/>
-                            <input type="button" class="buttonMinus" id="buttonMinus" value="-" data-pid="{{p.product_id}}"/>
-                            <input type="button" class="buttonMinus" id="buttonErase" value="x" data-pid="{{p.product_id}}"/>
+                            <a href="increase_item/{{p.product_id}}/" class="btn btn-outline-success">+</a>
+                            <a href="decrease_item/{{p.product_id}}/" class="btn btn-outline-danger">-</a>
+                            <a href="erase_item/{{p.product_id}}/" class="btn btn-outline-dark">x</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -39,7 +41,8 @@
     </div>
 
     <p><h5>Total Price: {{ total_price }}</h5></p>
-    <button class="button button1" id="placeOrder">Place Order</button>
+<!--    <button class="button button1" id="placeOrder">Place Order</button>-->
+    <a href="checkout/" class="btn btn-outline-dark">Place Order</a>
 
     {% load static %}
     <script language="JavaScript" src="{% static 'js/buttons.js' %}"></script>
