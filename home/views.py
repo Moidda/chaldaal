@@ -28,6 +28,7 @@ def get_table(searched_item):
     return context
 
 
+
 def home(request):
     if 'email' in request.session:
         searched_item = ""

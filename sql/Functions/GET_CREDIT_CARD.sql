@@ -36,10 +36,4 @@ END;
 
 
 
--- BEGIN
--- 	DBMS_OUTPUT.PUT_LINE(GET_CREDIT_CARD('mhasan912@gmail.com', 'BANK'));
--- END;
--- /
--- 
-
 

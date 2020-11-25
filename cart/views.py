@@ -75,7 +75,8 @@ def index(request):
         })
         total_price += amount*price_per_unit
 
-    return render(request, 'index.html', {'product': table, 'total_price': total_price})
+    #return render(request, 'index.html', {'product': table, 'total_price': total_price})
+    return render(request, 'bag.html')
 
 
 def checkout(request):
