@@ -46,12 +46,13 @@ def erase_item(request, product_id):
     return redirect('http://127.0.0.1:8000/cart/')
 
 
+# if cart is empty, then load bag.html
+# else load list of products in cart
 def index(request):
     if 'email' not in request.session:
         return redirect(home_page)
 
     table = []
-    total_price = 0
     for product_id, amount in cart.products.items():
         sql = 'SELECT * FROM PRODUCT WHERE PRODUCT_ID = %s'
         cursor.execute(sql, [product_id])
@@ -73,12 +74,13 @@ def index(request):
             'amount': amount,
             'to_pay': price_per_unit*amount
         })
-        total_price += amount*price_per_unit
 
-    #return render(request, 'index.html', {'product': table, 'total_price': total_price})
-    return render(request, 'bag.html')
+    return render(request, 'index.html', {'product': table, 'total_price': cart.total_cost})
+    # return render(request, 'bag.html')
 
 
+# loads the check out form page with customer information retrieved from
+# customer profile
 def checkout(request):
     if 'email' not in request.session:
         return redirect(home_page)
@@ -97,6 +99,8 @@ def checkout(request):
     return render(request, 'checkout.html', context)
 
 
+# places the ordar and updates the db tables
+# is called upon checkout form submission
 def confirm_checkout(request):
     if 'email' not in request.session:
         return redirect(home_page)
@@ -113,11 +117,19 @@ def confirm_checkout(request):
     paymentMethod = str(request.POST.get("paymentMethod"))
 
     ordar_no = (cursor.execute('SELECT MAX(ORDAR_NO) FROM ORDAR').fetchall())[0][0] + 1
+    cursor.callproc('CONFIRM_ORDAR', [ordar_no, request.session['customer_id']])
+    cursor.callproc('CONFIRM_PAYMENT', [ordar_no, request.session['customer_id'], cart.total_cost])
 
     for pid in cart.products:
         cnt = cart.products[pid]
-        # args = [ordar_no, request.session["customer_id"], pid, cnt]
-        # cursor.callproc('CONFIRM_CHECKOUT', args)
+        cursor.callproc('INSERT_PRODUCTS_IN_ORDAR', [ordar_no, pid, cnt])
 
-    return HttpResponse("Your order has been placed")
+    if paymentMethod == 'credit_card':
+        cursor.callproc('CONFIRM_CREDIT_CARD', [ordar_no, request.session['customer_id'], username, bank, card_type, card_no])
+    elif paymentMethod == 'bkash':
+        tid = '123k34k'
+        cursor.callproc('CONFIRM_BKASH', [ordar_no, request.sessionp['customer_id'], tid, bkash_phone_no])
+    # else:
+
+    return redirect(home_page)
 
