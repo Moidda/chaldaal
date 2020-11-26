@@ -61,33 +61,35 @@
             <div class="col-md-4 order-md-2 mb-4">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted">Your cart</span>
-                    <span class="badge badge-secondary badge-pill">3</span>
                 </h4>
                 <ul class="list-group mb-3">
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                            <h6 class="my-0">Product name</h6>
-                            <small class="text-muted">Brief description</small>
-                        </div>
-                        <span class="text-muted">$12</span>
-                    </li>
+
+                    {% for p in cart_products %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">{{p.product_name}}</h6>
+                                <small class="text-muted">{{p.unit}} {{p.price_per_unit}}TK x{{p.cnt}}</small>
+                            </div>
+                            <span class="text-muted">{{p.to_pay}}</span>
+                        </li>
+                    {% endfor %}
 
                     <li class="list-group-item d-flex justify-content-between bg-light">
                         <div class="text-success">
-                            <h6 class="my-0">Promo code</h6>
-                            <small>EXAMPLECODE</small>
+                            <h6 class="my-0">Credit discount</h6>
+                            <small>You have x credit points</small>
                         </div>
-                        <span class="text-success">-$5</span>
+                        <span class="text-success">-50</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Total (USD)</span>
-                        <strong>$20</strong>
+                        <span><strong>Total (BDT)</strong></span>
+                        <strong>{{total_cost}}</strong>
                     </li>
                 </ul>
 
                 <form class="card p-2">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code">
+                        <input type="text" class="form-control" placeholder="Use your points here">
                         <div class="input-group-append">
                         <button type="submit" class="btn btn-secondary">Redeem</button>
                         </div>
@@ -172,21 +174,33 @@
 							<div class="col-md-6 mb-3">
 								<label for="username">Name</label>
 								<input type="text" class="form-control" id="username" name="username" value="{{username}}">
+                                <div class="invalid-feedback">
+                                    Please enter your card name
+                                </div>
 							</div>
 							<div class="col-md-6 mb-3">
 								<label for="bank">Bank</label>
 								<input type="text" class="form-control" id="bank" name="bank" value="{{bank}}">
-							</div>
+							    <div class="invalid-feedback">
+                                    Please enter which bank the card belongs
+                                </div>
+                            </div>
 						</div>
 						<div class="row">
 							<div class="col-md-6 mb-3">
 								<label for="card_type">Card Type</label>
 								<input type="text" class="form-control" id="card_type" name="card_type" value="{{card_type}}">
-							</div>
+							    <div class="invalid-feedback">
+                                    Enter what type of card you are using
+                                </div>
+                            </div>
 							<div class="col-md-6 mb-3">
 								<label for="card_no">Card No</label>
 								<input type="text" class="form-control" id="card_no" name="card_no" value="{{card_no}}">
-							</div>
+							    <div class="invalid-feedback">
+                                    Please enter your card number
+                                </div>
+                            </div>
 						</div>
 
 						<hr class="mb-4">
@@ -195,7 +209,10 @@
 						<div class="mb-3">
 							<label for="bkash_phone_no">Phone No</label>
 							<input type="text" class="form-control" id="bkash_phone_no" name="bkash_phone_no" value="{{bkash_phone_no}}">
-						</div>
+						    <div class="invalid-feedback">
+                                Please enter your bkash phone no
+                            </div>
+                        </div>
 
                     <hr class="mb-4">
                     <button class="btn btn-primary btn-lg btn-block" id="submit_btn" type="submit">Confirm Payment</button>
@@ -215,7 +232,7 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.5/dist/js/bootstrap.bundle.min.js"><\/script>')</script><script src="https://getbootstrap.com/docs/4.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <script src="https://getbootstrap.com/docs/4.5/examples/checkout/form-validation.js"></script>
-    <script language="JavaScript" src="{% static 'js/checkout.js' %}"></script>
+    {% load static %}
+    <script language="JavaScript" src="{% static 'js/form-validation.js' %}"></script>
 </body>
 </html>

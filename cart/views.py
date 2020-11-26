@@ -80,6 +80,7 @@ def index(request):
     return render(request, 'index.html', {'product': table, 'total_price': cart.total_cost})
 
 
+
 # loads the check out form page with customer information retrieved from
 # customer profile
 def checkout(request):
@@ -91,12 +92,39 @@ def checkout(request):
         'street_no': request.session['street_no'],
         'house_no': request.session['house_no'],
         'apt_no': request.session['apt_no'],
+
         'username': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['email'], 'USERNAME']),
         'bank': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['email'], 'BANK']),
         'card_type': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['email'], 'CARD_TYPE']),
         'card_no': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['email'], 'CARD_NO']),
         'bkash_phone_no': cursor.callfunc('GET_BKASH', str, [request.session['email'], 'PHONE_NO'])
     }
+
+    for key in context:
+        if not context[key]:
+            context[key] = ''
+
+    # cart_products should be a list
+    # for each p in cart_products, we need
+    # p.product_name, p.unit, p.cnt, p.price_per_unit, p.to_pay
+    context['cart_products'] = []
+    for pid, cnt in cart.products.items():
+        sql = 'SELECT PRODUCT_NAME, PRICE_PER_UNIT, UNIT FROM PRODUCT WHERE PRODUCT_ID = %s'
+        cursor.execute(sql, [pid])
+        result = cursor.fetchone()
+        product_name = result[0]
+        price_per_unit = result[1]
+        unit = result[2]
+        context['cart_products'].append({
+            'product_name': product_name,
+            'unit': unit,
+            'price_per_unit': price_per_unit,
+            'cnt': cnt,
+            'to_pay': cnt*price_per_unit
+        })
+
+    context['total_cost'] = cart.total_cost
+
     return render(request, 'checkout.html', context)
 
 
@@ -130,9 +158,9 @@ def confirm_checkout(request):
     elif paymentMethod == 'bkash':
         tid = '123k34k'
         cursor.callproc('CONFIRM_BKASH', [ordar_no, request.sessionp['customer_id'], tid, bkash_phone_no])
-    # else:
 
     cart.clear_cart()
 
+    # return HttpResponse("Success!!!!")
     return redirect(home_page)
 
