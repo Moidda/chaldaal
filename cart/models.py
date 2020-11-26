@@ -33,3 +33,5 @@ class Cart:
         self.products.clear()
         self.total_cost = 0
 
+    def is_empty(self):
+        return not bool(self.products)

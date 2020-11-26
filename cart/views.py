@@ -75,8 +75,9 @@ def index(request):
             'to_pay': price_per_unit*amount
         })
 
+    if cart.is_empty():
+        return render(request, 'bag.html')
     return render(request, 'index.html', {'product': table, 'total_price': cart.total_cost})
-    # return render(request, 'bag.html')
 
 
 # loads the check out form page with customer information retrieved from
@@ -130,6 +131,8 @@ def confirm_checkout(request):
         tid = '123k34k'
         cursor.callproc('CONFIRM_BKASH', [ordar_no, request.sessionp['customer_id'], tid, bkash_phone_no])
     # else:
+
+    cart.clear_cart()
 
     return redirect(home_page)
 
