@@ -30,7 +30,7 @@ def get_table(searched_item):
 
 
 def home(request):
-    if 'email' in request.session:
+    if 'customer_id' in request.session:
         searched_item = ""
         if 'searched_item' in request.session:
             searched_item = request.session['searched_item']
@@ -41,7 +41,7 @@ def home(request):
 
 
 def searched(request):
-    if 'email' in request.session:
+    if 'customer_id' in request.session:
         searched_item = str(request.POST.get('searched'))
         searched_item = searched_item.lower()
         request.session['searched_item'] = searched_item

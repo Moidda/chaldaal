@@ -7,7 +7,7 @@ home_page = 'http://127.0.0.1:8000/'
 
 
 def manage_product(request):
-    if 'email' in request.session and request.session['email'] == 'kumpir@yanak.com':
+    if 'customer_id' in request.session and request.session['customer_id'] == 1:
         return render(request, 'manage_product.html')
     return redirect(home_page)
 

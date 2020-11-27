@@ -51,13 +51,6 @@ def get_customer_info_sql(user_email):
 
 def create_session(request, result):
     request.session['customer_id'] = result[0]
-    request.session['customer_name'] = result[1]
-    request.session['street_no'] = result[2]
-    request.session['house_no'] = result[3]
-    request.session['apt_no'] = result[4]
-    request.session['email'] = result[5]
-    request.session['customer_credit'] = result[6]
-    request.session['password'] = result[7]
 
 
 def log_in_verification(request):
