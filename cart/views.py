@@ -16,7 +16,9 @@ def add_item(request, product_id):
     if 'customer_id' not in request.session:
         return redirect(home_page)
 
-    cart.add_product(product_id)
+    units_in_stock = (cursor.execute('SELECT UNITS_IN_STOCK FROM PRODUCT WHERE PRODUCT_ID = %s', [product_id]).fetchall())[0][0]
+    if units_in_stock:
+        cart.add_product(product_id)
     return redirect(home_page)
 
 
@@ -25,7 +27,9 @@ def increase_item(request, product_id):
     if 'customer_id' not in request.session:
         return redirect(home_page)
 
-    cart.add_product(product_id)
+    units_in_stock = (cursor.execute('SELECT UNITS_IN_STOCK FROM PRODUCT WHERE PRODUCT_ID = %s', [product_id]).fetchall())[0][0]
+    if units_in_stock:
+        cart.add_product(product_id)
     return redirect('http://127.0.0.1:8000/cart/')
 
 

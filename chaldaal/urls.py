@@ -20,7 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('', include('register.urls')),
-    path('', include('kumpir.urls')),
+    path('manage_product/', include('kumpir.urls')),
     path('cart/', include('cart.urls')),
     path('profile/', include('customerProfile.urls')),
     path('rate/', include('productRating.urls')),

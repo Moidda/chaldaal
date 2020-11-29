@@ -79,64 +79,25 @@
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
-
-
-					<h3 id="form-title">Insert a new product</h3>
+					<h3 id="form-title">Change stock</h3>
 				</div>
 				<div class="d-flex justify-content-center form_container">
 					<form method="POST" action="insert_product/">
                         {% csrf_token %}
 
-<!--						product name-->
+<!--						product Id-->
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                             </div>
-							<input type="text" name="product_name" placeholder="Name..." class="form-control">
+							<input type="text" name="product_id" placeholder="Product Id" class="form-control">
 						</div>
-<!--						product unit-->
+<!--						Change-->
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                             </div>
-							<input type="text" name="unit" placeholder="Unit..." class="form-control">
+							<input type="text" name="change_in_stock" placeholder="+/-amount (Eg +100)" class="form-control">
 						</div>
-<!--						units in stock-->
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                            </div>
-							<input type="text" name="units_in_stock" placeholder="Units in stock..." class="form-control">
-						</div>
-<!--						price per unit-->
-                        <div class="input-group mb-2">
-                            <div class="input-group-append">
-                            </div>
-							<input type="text" name="price_per_unit" placeholder="Price..." class="form-control">
-						</div>
-<!--						category-->
-						<div class="input-group mb-2">
-                            <div class="input-group-append">
-                            </div>
-							<select id="options" name="category" class="form-control" required>
-								<option disabled selected hidden>Category</option>
-								<option value="Breakfast">Breakfast</option>
-								<option value="Fruit and Vegetable">Fruit and Vegetable</option>
-								<option value="Beverage">Beverage</option>
-								<option value="Meat and Fish">Meat and Fish</option>
-								<option value="Snacks">Snacks</option>
-								<option value="Dairy">Dairy</option>
-								<option value="Frozen">Frozen</option>
-								<option value="Bakery">Bakery</option>
-								<option value="Baking Needs">Baking Needs</option>
-								<option value="Cooking">Cooking</option>
-							</select>
-						</div>
-<!--						sub category-->
-						<div class="input-group mb-2">
-                            <div class="input-group-append">
-                            </div>
-							<select id="choices" name="sub_category" class="form-control" required>
-								<option value="" disabled selected>Please select a category</option>
-							</select>
-						</div>
+
 						<script language="JavaScript">
 							var lookup = {
 								'Breakfast': ['Local', 'Energy Booster', 'Cereals', 'Jam and Spreads'],
@@ -160,7 +121,7 @@
 						</script>
 
                         <div class="d-flex justify-content-center mt-3 login_container">
-                            <input class="btn login_btn" type="submit" value="Create Product Item">
+                            <input class="btn login_btn" type="submit" value="Change">
 						</div>
 					</form>
 
@@ -169,7 +130,7 @@
 
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">
-						Existing product? <a href="#" class="ml-2">Change Stock</a>
+						Insert new product? <a href="#" class="ml-2">Click here</a>
 					</div>
 				</div>
 
