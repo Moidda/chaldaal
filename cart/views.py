@@ -128,7 +128,8 @@ def checkout(request):
 
     context['total_cost'] = cart.total_cost
 
-    return render(request, 'checkout.html', context)
+    #return render(request, 'checkout.html', context)
+    return render(request, 'Dashboard.html', context)
 
 
 # places the ordar and updates the db tables

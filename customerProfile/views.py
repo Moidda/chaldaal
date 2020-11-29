@@ -50,7 +50,7 @@ def save_changes(request):
         bkash_phone_no = str(request.POST.get("bkash_phone_no"))
 
         cursor.callproc('UPDATE_CUSTOMER_INFO', [request.session['customer_id'], customer_name, email, street_no, house_no, apt_no])
-        cursor.callproc('UPDATE_CUSTOMER_PAYMENT_INFO', [request.session['customer_id'], bank, username, card_type, card_no, bkash_phone_no])
+        cursor.callproc('UPDATE_CUSTOMER_PAYMENT_INFO', [request.session['customer_id'], username, bank, card_type, card_no, bkash_phone_no])
 
         return redirect('/')
 
