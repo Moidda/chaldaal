@@ -1,0 +1,36 @@
+<!-- write main.html -->
+
+{% extends 'main.html' %}
+
+{% block content %}
+
+    {% load static %}
+
+    <p><h4>Please rate our products if you liked them!!</h4></p>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Name</th>
+					<th>Rating</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in product %}
+                    <tr>
+                        <td>{{p.product_name}}</td>
+                        <td>{{p.rating}}</td>
+						<td>
+                            <a href="increase_rating/{{p.product_id}}/" class="btn btn-outline-success">+</a>
+                            <a href="decrease_rating/{{p.product_id}}/" class="btn btn-outline-danger">-</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{% url 'save_rating' %}" class="btn btn-outline-dark">Done</a>
+
+{% endblock %}

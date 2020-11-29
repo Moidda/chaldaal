@@ -8,7 +8,7 @@ home_page = 'http://127.0.0.1:8000'
 
 def get_table(searched_item):
     cursor = connection.cursor()
-    sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%'" % searched_item
+    sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
     cursor.execute(sql)
     result = cursor.fetchall()
     context = []

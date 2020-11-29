@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'kumpir',
     'cart',
     'customerProfile',
+    'productRating',
 ]
 
 MIDDLEWARE = [

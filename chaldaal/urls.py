@@ -23,4 +23,5 @@ urlpatterns = [
     path('', include('kumpir.urls')),
     path('cart/', include('cart.urls')),
     path('profile/', include('customerProfile.urls')),
+    path('rate/', include('productRating.urls')),
 ]

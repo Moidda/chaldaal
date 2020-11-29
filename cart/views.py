@@ -155,10 +155,8 @@ def confirm_checkout(request):
     if paymentMethod == 'credit_card':
         cursor.callproc('CONFIRM_CREDIT_CARD', [ordar_no, request.session['customer_id'], username, bank, card_type, card_no])
     elif paymentMethod == 'bkash':
-        tid = '123k34k'
-        cursor.callproc('CONFIRM_BKASH', [ordar_no, request.sessionp['customer_id'], tid, bkash_phone_no])
+        transaction_id = '123987'
+        cursor.callproc('CONFIRM_BKASH', [ordar_no, request.session['customer_id'], transaction_id, bkash_phone_no])
 
-    cart.clear_cart()
-
-    return redirect(home_page)
+    return redirect('http://127.0.0.1:8000/rate/')
 
