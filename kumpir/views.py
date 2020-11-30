@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.db import connection
 
 home_page = 'http://127.0.0.1:8000/'
+cursor = connection.cursor()
 
 
 def manage_product(request):
@@ -13,7 +14,6 @@ def manage_product(request):
 
 
 def insert_product_sql(product_name, unit, units_in_stock, price_per_unit, category, sub_category):
-    cursor = connection.cursor()
     sql = 'SELECT MAX(PRODUCT_ID) FROM PRODUCT'
     cursor.execute(sql)
     result = cursor.fetchall()
@@ -41,3 +41,24 @@ def insert_product(request):
 
         return redirect('http://127.0.0.1:8000/manage_product/')
 
+
+def stock(request):
+    return render(request, 'stock.html')
+
+
+def change_stock(request):
+    product_id = str(request.POST.get("product_id"))
+    change_in_stock = str(request.POST.get("change_in_stock"))
+
+    operation = change_in_stock[0]
+    value = change_in_stock[1:]
+    value = int(value)
+
+    if operation == '+':
+        sql = 'UPDATE PRODUCT SET UNITS_IN_STOCK = UNITS_IN_STOCK + %s WHERE PRODUCT_ID = %s'
+        cursor.execute(sql, [value, product_id])
+    else:
+        sql = 'UPDATE PRODUCT SET UNITS_IN_STOCK = UNITS_IN_STOCK - %s WHERE PRODUCT_ID = %s'
+        cursor.execute(sql, [value, product_id])
+
+    return redirect("http://127.0.0.1:8000/manage_product/stock/")
