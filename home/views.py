@@ -4,11 +4,11 @@ from django.db import connection
 from django.shortcuts import redirect
 
 home_page = 'http://127.0.0.1:8000'
+log_in = 'http://127.0.0.1:8000/log_in'
+cursor = connection.cursor()
 
 
-def get_table(searched_item):
-    cursor = connection.cursor()
-    sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
+def get_table(sql):
     cursor.execute(sql)
     result = cursor.fetchall()
     context = []
@@ -34,10 +34,25 @@ def home(request):
         searched_item = ""
         if 'searched_item' in request.session:
             searched_item = request.session['searched_item']
-        table = get_table(searched_item)
+
+        sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
+        table = get_table(sql)
+
         return render(request, 'home_page.html', {'product': table})
     else:
-        return redirect('http://127.0.0.1:8000/log_in')
+        return redirect(log_in)
+
+
+
+def popular(request):
+    if 'customer_id' not in request.session:
+        return redirect(log_in)
+
+    sql = "SELECT * FROM PRODUCT WHERE RATING_BY_CUSTOMER>2 ORDER BY PRODUCT_ID"
+    table = get_table(sql)
+
+    return render(request, 'home_page.html', {'product': table})
+
 
 
 def searched(request):
