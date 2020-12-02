@@ -17,6 +17,7 @@ def customer_profile(request):
         'street_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'STREET_NO']),
         'house_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'HOUSE_NO']),
         'apt_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'APT_NO']),
+        'customer_credit': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'CUSTOMER_CREDIT']),
 
         'username': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['customer_id'], 'USERNAME']),
         'bank': cursor.callfunc('GET_CREDIT_CARD', str, [request.session['customer_id'], 'BANK']),
@@ -52,5 +53,5 @@ def save_changes(request):
         cursor.callproc('UPDATE_CUSTOMER_INFO', [request.session['customer_id'], customer_name, email, street_no, house_no, apt_no])
         cursor.callproc('UPDATE_CUSTOMER_PAYMENT_INFO', [request.session['customer_id'], username, bank, card_type, card_no, bkash_phone_no])
 
-        return redirect('/')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

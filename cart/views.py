@@ -12,6 +12,7 @@ cursor = connection.cursor()
 
 # when user adds an item in the cart from the home page
 # the url 'cart/add_item/<product_id>' is called from home_page.html
+# redirects to the previous page (the page/address it came from)
 def add_item(request, product_id):
     if 'customer_id' not in request.session:
         return redirect(home_page)
@@ -19,11 +20,11 @@ def add_item(request, product_id):
     units_in_stock = (cursor.execute('SELECT UNITS_IN_STOCK FROM PRODUCT WHERE PRODUCT_ID = %s', [product_id]).fetchall())[0][0]
     if units_in_stock:
         cart.add_product(product_id)
-    # return redirect(home_page)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 # increase an item from the cart page
+# reloads the cart page
 def increase_item(request, product_id):
     if 'customer_id' not in request.session:
         return redirect(home_page)
@@ -35,15 +36,16 @@ def increase_item(request, product_id):
 
 
 # decrease an item from the cart page
+# reloads the cart page
 def decrease_item(request, product_id):
     if 'customer_id' not in request.session:
         return redirect(home_page)
-
     cart.remove_product(product_id)
     return redirect('http://127.0.0.1:8000/cart/')
 
 
 # erases a product from the cart
+# reloads the cart page
 def erase_item(request, product_id):
     if 'customer_id' not in request.session:
         return redirect(home_page)
@@ -143,8 +145,9 @@ def checkout(request):
     return render(request, 'checkout.html', context)
 
 
-# places the ordar and updates the db tables
+# places the order and updates the db tables
 # is called upon checkout form submission
+# redirects to product rating page
 def confirm_checkout(request):
     if 'customer_id' not in request.session:
         return redirect(home_page)
@@ -189,6 +192,10 @@ def confirm_checkout(request):
     return redirect('http://127.0.0.1:8000/rate/')
 
 
+# is called on click 'REDEEM' from checkout page
+# checks validity of the amount of credit point customer
+# is attempting to redeem, recalculates the total cost of cart accordingly
+# reloads the check out form page
 def using_points(request):
     point = str(request.POST.get('using_points'))
     point = int(point)
