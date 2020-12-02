@@ -19,7 +19,8 @@ def add_item(request, product_id):
     units_in_stock = (cursor.execute('SELECT UNITS_IN_STOCK FROM PRODUCT WHERE PRODUCT_ID = %s', [product_id]).fetchall())[0][0]
     if units_in_stock:
         cart.add_product(product_id)
-    return redirect(home_page)
+    # return redirect(home_page)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 # increase an item from the cart page
@@ -180,9 +181,11 @@ def confirm_checkout(request):
         cursor.callproc('CONFIRM_BKASH', [ordar_no, request.session['customer_id'], transaction_id, bkash_phone_no])
 
     sql = 'UPDATE CUSTOMER SET CUSTOMER_CREDIT = CUSTOMER_CREDIT - %s WHERE CUSTOMER_ID = %s'
-    cursor.execute(sql,[request.session['point'],request.session['customer_id']])
+    cursor.execute(sql, [used_bonus, request.session['customer_id']])
 
-    request.session['point'] = 0
+    if 'point' in request.session:
+        request.session['point'] = 0
+
     return redirect('http://127.0.0.1:8000/rate/')
 
 

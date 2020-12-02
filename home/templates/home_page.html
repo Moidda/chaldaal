@@ -32,7 +32,7 @@
                         <td>{{p.sub_category}}</td>
                         <td>{{p.rating_by_customer}}</td>
                         <td>
-                            <form method="POST" action="cart/add_item/{{ p.product_id }}/">
+                            <form method="POST" action="http://127.0.0.1:8000/cart/add_item/{{ p.product_id }}/">
                                 {% csrf_token %}
                                 <input type="submit" class="buttonAdd" value="+" name/>
                             </form>

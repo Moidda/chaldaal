@@ -28,20 +28,11 @@ def get_table(sql):
     return context
 
 
-
 def home(request):
     if 'customer_id' in request.session:
-        searched_item = ""
-        if 'searched_item' in request.session:
-            searched_item = request.session['searched_item']
-
-        sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
-        table = get_table(sql)
-
-        return render(request, 'home_page.html', {'product': table})
+        return render(request, 'Homepage.html')
     else:
         return redirect(log_in)
-
 
 
 def popular(request):
@@ -54,12 +45,28 @@ def popular(request):
     return render(request, 'home_page.html', {'product': table})
 
 
+def show_product_category(request, category):
+    category = category.lower()
+    category = category.replace('-', ' ')
+    sql = "SELECT * FROM PRODUCT WHERE LOWER(CATEGORY) = '%s' ORDER BY PRODUCT_ID" % category
+    table = get_table(sql)
+    return render(request, 'home_page.html', {'product': table})
+
+
+def show_product_search(request, searched_item):
+    if searched_item == 'none':
+        searched_item = ''
+    sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
+    table = get_table(sql)
+    return render(request, 'home_page.html', {'product': table})
+
 
 def searched(request):
     if 'customer_id' in request.session:
         searched_item = str(request.POST.get('searched'))
         searched_item = searched_item.lower()
-        request.session['searched_item'] = searched_item
-        return redirect(home_page)
+        if not searched_item:
+            searched_item = 'none'
+        return redirect('http://127.0.0.1:8000/show_product_search/' + searched_item + '/')
 
 
