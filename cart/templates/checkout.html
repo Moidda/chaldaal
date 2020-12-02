@@ -77,8 +77,11 @@
                 </svg>
                 <font style = "font-family:verdana;">Chaldaal</font>
             </a>
-            <input class="form-control form-control-dark w-100" type="text" placeholder="Search for products(e.g eggs,milk,potato)" aria-label="Search">
-            <a class="nav-link" href="http://127.0.0.1:8000/log_out/">Search</a>
+            <form class="form-inline" method="POST" action="http://127.0.0.1:8000/searched/">
+                {% csrf_token %}
+                <input class="form-control form-control-dark mr-sm-2" size="110" type="search" name="searched" minlength="3" placeholder="Search for products (e.g. eggs, milk, potato)" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
                     <a class="nav-link" href="http://127.0.0.1:8000/log_out/">Log out</a>
@@ -161,18 +164,19 @@
                                 <li class="list-group-item d-flex justify-content-between bg-light">
                                     <div class="text-success">
                                         <h6 class="my-0">Credit discount</h6>
-                                        <small>You have x credit points</small>
+                                        <small>You have {{points}} credit points</small>
                                     </div>
-                                    <span class="text-success">-50</span>
+                                    <span class="text-success">- {{used_points}}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between">
                                     <span><strong>Total (BDT)</strong></span>
                                     <strong>{{total_cost}}</strong>
                                 </li>
                             </ul>
-                            <form class="card p-2">
+                            <form class="card p-2" method = "post" action = "using_points/">
+                                {% csrf_token %}
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Use your points here">
+                                    <input type="text" name="using_points" class="form-control" placeholder="Use your points here">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-secondary">Redeem</button>
                                     </div>
@@ -308,8 +312,8 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-        <script src="../../assets/js/vendor/popper.min.js"></script>
-        <script src="../../dist/js/bootstrap.min.js"></script>
+        <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>
+        <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
         <!-- Icons -->
         <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
         <script>
@@ -346,5 +350,7 @@
               }
             });
         </script>
+    {% load static %}
+    <script language="JavaScript" src="{% static 'js/form-validation.js' %}"> </script>
     </body>
 </html>

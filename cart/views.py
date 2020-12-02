@@ -126,7 +126,18 @@ def checkout(request):
             'to_pay': cnt*price_per_unit
         })
 
-    context['total_cost'] = cart.total_cost
+    sql = 'SELECT CUSTOMER_CREDIT FROM CUSTOMER WHERE CUSTOMER_ID = %s'
+    cursor.execute(sql,[request.session['customer_id']])
+    result = cursor.fetchall()
+    customer_credit = result[0][0]
+    context['points'] = customer_credit
+
+    if 'point' in request.session:
+        context['used_points'] = 2*request.session['point']
+    else:
+        context['used_points'] = 0
+
+    context['total_cost'] = cart.total_cost - context['used_points']
 
     return render(request, 'checkout.html', context)
 
@@ -150,6 +161,12 @@ def confirm_checkout(request):
 
     ordar_no = (cursor.execute('SELECT MAX(ORDAR_NO) FROM ORDAR').fetchall())[0][0] + 1
 
+    used_bonus = 0
+    if 'point' in request.session:
+        used_bonus = 2*request.session['point']
+
+    cart.total_cost -= used_bonus
+
     cursor.callproc('CONFIRM_ORDAR', [ordar_no, request.session['customer_id']])
     cursor.callproc('CONFIRM_PAYMENT', [ordar_no, request.session['customer_id'], cart.total_cost])
     for pid in cart.products:
@@ -162,5 +179,23 @@ def confirm_checkout(request):
         transaction_id = '123987'
         cursor.callproc('CONFIRM_BKASH', [ordar_no, request.session['customer_id'], transaction_id, bkash_phone_no])
 
+    sql = 'UPDATE CUSTOMER SET CUSTOMER_CREDIT = CUSTOMER_CREDIT - %s WHERE CUSTOMER_ID = %s'
+    cursor.execute(sql,[request.session['point'],request.session['customer_id']])
+
+    request.session['point'] = 0
     return redirect('http://127.0.0.1:8000/rate/')
 
+
+def using_points(request):
+    point = str(request.POST.get('using_points'))
+    point = int(point)
+
+    sql = 'SELECT CUSTOMER_CREDIT FROM CUSTOMER WHERE CUSTOMER_ID = %s'
+    cursor.execute(sql, [request.session['customer_id']])
+    result = cursor.fetchall()
+    customer_credit = result[0][0]
+
+    if point <= customer_credit and point >= 0:
+        request.session['point'] = point
+
+    return redirect("http://127.0.0.1:8000/cart/checkout/")

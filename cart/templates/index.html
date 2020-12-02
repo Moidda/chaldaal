@@ -77,8 +77,12 @@
                 </svg>
                 <font style = "font-family:verdana;">Chaldaal</font>
             </a>
-            <input class="form-control form-control-dark w-100" type="text" placeholder="Search for products(e.g eggs,milk,potato)" aria-label="Search">
-            <a class="nav-link" href="http://127.0.0.1:8000/log_out/">Search</a>
+            <form class="form-inline" method="POST" action="http://127.0.0.1:8000/searched/">
+                {% csrf_token %}
+                <input class="form-control form-control-dark mr-sm-2" size="110" type="search" name="searched" minlength="3" placeholder="Search for products (e.g. eggs, milk, potato)" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
                     <a class="nav-link" href="http://127.0.0.1:8000/log_out/">Log out</a>
