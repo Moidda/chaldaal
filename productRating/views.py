@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from cart.views import cart
 from django.db import connection
 from django.http import HttpResponse
+from cart.views import cart
 
 
 cursor = connection.cursor()
@@ -17,7 +18,14 @@ def rating(request):
             'product_name': product_name,
             'rating': cart.rating[pid]
         })
-    return render(request, 'rating.html', {'product': lst, 'customer_id': request.session['customer_id']})
+
+    context = {
+        'product': lst,
+        'customer_id': request.session['customer_id'],
+        'cart_price': cart.total_cost
+    }
+
+    return render(request, 'rating.html', context)
 
 
 def increase_rating(request, pid):

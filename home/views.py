@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db import connection
 from django.shortcuts import redirect
+from cart.views import cart
+
 
 home_page = 'http://127.0.0.1:8000'
 log_in = 'http://127.0.0.1:8000/log_in'
@@ -21,16 +23,30 @@ def get_table(sql):
         category = row[5]
         sub_category = row[6]
         rating_by_customer = row[7]
-        context.append({'product_id': product_id, 'product_name': product_name, 'unit': unit, 'units_in_stock': units_in_stock,
-             'price_per_unit': price_per_unit, 'category': category, 'sub_category': sub_category,
-             'rating_by_customer': rating_by_customer})
+        cart_count = 0
+        if product_id in cart.products:
+            cart_count = cart.products[product_id]
+        context.append({
+            'product_id': product_id,
+            'product_name': product_name,
+            'unit': unit,
+            'units_in_stock': units_in_stock,
+            'price_per_unit': price_per_unit,
+            'category': category, 'sub_category': sub_category,
+            'rating_by_customer': rating_by_customer,
+            'cart_count': cart_count
+        })
 
     return context
 
 
 def home(request):
     if 'customer_id' in request.session:
-        return render(request, 'Homepage.html', {'customer_id': request.session['customer_id']})
+        context = {
+            'customer_id': request.session['customer_id'],
+            'cart_price': cart.total_cost
+        }
+        return render(request, 'Homepage.html', context)
     else:
         return redirect(log_in)
 
@@ -41,24 +57,46 @@ def popular(request):
 
     sql = "SELECT * FROM PRODUCT WHERE RATING_BY_CUSTOMER>2 ORDER BY PRODUCT_ID"
     table = get_table(sql)
+    context = {
+        'product': table,
+        'customer_id': request.session['customer_id'],
+        'cart_price': cart.total_cost
+    }
 
-    return render(request, 'home_page.html', {'product': table, 'customer_id': request.session['customer_id']})
+    return render(request, 'home_page.html', context)
 
 
 def show_product_category(request, category):
+    if 'customer_id' not in request.session:
+        return redirect(log_in)
+
     category = category.lower()
     category = category.replace('-', ' ')
     sql = "SELECT * FROM PRODUCT WHERE LOWER(CATEGORY) = '%s' ORDER BY PRODUCT_ID" % category
     table = get_table(sql)
-    return render(request, 'home_page.html', {'product': table, 'customer_id': request.session['customer_id']})
+    context = {
+        'product': table,
+        'customer_id': request.session['customer_id'],
+        'cart_price': cart.total_cost
+    }
+
+    return render(request, 'home_page.html', context)
 
 
 def show_product_search(request, searched_item):
+    if 'customer_id' not in request.session:
+        return redirect(log_in)
+
     if searched_item == 'none':
         searched_item = ''
     sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
     table = get_table(sql)
-    return render(request, 'home_page.html', {'product': table, 'customer_id': request.session['customer_id']})
+    context = {
+        'product': table,
+        'customer_id': request.session['customer_id'],
+        'cart_price': cart.total_cost
+    }
+    return render(request, 'home_page.html', context)
 
 
 def searched(request):

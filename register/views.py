@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.db import connection
+from cart.views import cart
 
 
 def sign_up(request):
@@ -74,4 +75,5 @@ def log_in_verification(request):
 def log_out(request):
     request.session.clear()
     request.session.flush()
+    cart.clear_cart()
     return redirect('http://127.0.0.1:8000/log_in/')

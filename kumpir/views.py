@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.db import connection
 from django.http import JsonResponse
+from cart.views import cart
 
 
 home_page = 'http://127.0.0.1:8000/'
@@ -44,7 +45,11 @@ def insert_product(request):
 
 
 def stock(request):
-    return render(request, 'stock.html', {'customer_id': request.session['customer_id']})
+    context = {
+        'customer_id': request.session['customer_id'],
+        'cart_price': cart.total_cost
+    }
+    return render(request, 'stock.html', context)
 
 
 def change_stock(request):
