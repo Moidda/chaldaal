@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.db import connection
+from django.http import JsonResponse
+
 
 home_page = 'http://127.0.0.1:8000/'
 cursor = connection.cursor()
@@ -9,7 +11,7 @@ cursor = connection.cursor()
 
 def manage_product(request):
     if 'customer_id' in request.session and request.session['customer_id'] == 1:
-        return render(request, 'manage_product.html')
+        return render(request, 'manage_product.html', {'customer_id': request.session['customer_id']})
     return redirect(home_page)
 
 
@@ -18,7 +20,6 @@ def insert_product_sql(product_name, unit, units_in_stock, price_per_unit, categ
     cursor.execute(sql)
     result = cursor.fetchall()
     max_id = int(result[0][0])
-
     sql = '''
         INSERT INTO PRODUCT
         (PRODUCT_ID, PRODUCT_NAME, UNIT, UNITS_IN_STOCK, PRICE_PER_UNIT, CATEGORY, SUB_CATEGORY, RATING_BY_CUSTOMER)
@@ -43,11 +44,11 @@ def insert_product(request):
 
 
 def stock(request):
-    return render(request, 'stock.html')
+    return render(request, 'stock.html', {'customer_id': request.session['customer_id']})
 
 
 def change_stock(request):
-    product_id = str(request.POST.get("product_id"))
+    product_id = str(request.POST.get("products"))
     change_in_stock = str(request.POST.get("change_in_stock"))
 
     operation = change_in_stock[0]
@@ -58,7 +59,26 @@ def change_stock(request):
         sql = 'UPDATE PRODUCT SET UNITS_IN_STOCK = UNITS_IN_STOCK + %s WHERE PRODUCT_ID = %s'
         cursor.execute(sql, [value, product_id])
     else:
+        cursor.execute('SELECT UNITS_IN_STOCK FROM PRODUCT WHERE PRODUCT_ID = %s', [product_id])
+        in_stock = (cursor.fetchall())[0][0]
+        value = min(in_stock, value)
         sql = 'UPDATE PRODUCT SET UNITS_IN_STOCK = UNITS_IN_STOCK - %s WHERE PRODUCT_ID = %s'
         cursor.execute(sql, [value, product_id])
 
     return redirect("http://127.0.0.1:8000/manage_product/stock/")
+
+
+def get_products(request):
+    category = request.GET.get('category', None)
+    subcategory = request.GET.get('subcategory', None)
+    sql = 'SELECT PRODUCT_ID, PRODUCT_NAME FROM PRODUCT WHERE CATEGORY = %s AND SUB_CATEGORY = %s'
+    cursor.execute(sql, [category, subcategory])
+    result = cursor.fetchall()
+    data = []
+    for row in result:
+        data.append({
+            'product_id': row[0],
+            'product_name': row[1]
+        })
+    return JsonResponse(data, safe=False)
+

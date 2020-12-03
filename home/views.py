@@ -30,7 +30,7 @@ def get_table(sql):
 
 def home(request):
     if 'customer_id' in request.session:
-        return render(request, 'Homepage.html')
+        return render(request, 'Homepage.html', {'customer_id': request.session['customer_id']})
     else:
         return redirect(log_in)
 

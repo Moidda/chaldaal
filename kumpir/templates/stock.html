@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html>
+{% extends 'main.html' %}
 
-<head>
-	<title>Manage Product</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
+{% block head_extra %}
 	<style>
 		body,
 		html {
@@ -72,61 +67,64 @@
 			margin-top: 10px;
 		}
 	</style>
+{% endblock %}
 
-</head>
-<body>
-	<div class="container h-100">
+
+{% block content %}
+	<div class="container h-50">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
 					<h3 id="form-title">Change stock</h3>
 				</div>
 				<div class="d-flex justify-content-center form_container">
-					<form method="POST" action="change_stock/">
+					<form id="form" method="POST" action="{% url 'change_stock' %}">
                         {% csrf_token %}
 
-<!--						product Id-->
                         <div class="input-group mb-2">
-                            <div class="input-group-append">
-                            </div>
-							<input type="text" name="product_id" placeholder="Product Id" class="form-control">
+                            <div class="input-group-append"></div>
+							<select id="choice1" name="category" class="form-control" required>
+								<option disabled selected hidden>Category</option>
+								<option value="Breakfast">Breakfast</option>
+								<option value="Fruit and Vegetable">Fruit and Vegetable</option>
+								<option value="Beverage">Beverage</option>
+								<option value="Meat and Fish">Meat and Fish</option>
+								<option value="Snacks">Snacks</option>
+								<option value="Dairy">Dairy</option>
+								<option value="Frozen">Frozen</option>
+								<option value="Bakery">Bakery</option>
+								<option value="Baking Needs">Baking Needs</option>
+								<option value="Cooking">Cooking</option>
+								<option value="Baby Food">Baby Food</option>
+								<option value="Diabetic Food">Diabetic Food</option>
+							</select>
 						</div>
-<!--						Change-->
+
+						<div class="input-group mb-2">
+                            <div class="input-group-append"></div>
+							<select id="choice2" name="sub_category" class="form-control" required>
+								<option value="" disabled selected>Please select a category</option>
+							</select>
+						</div>
+
+						<div class="input-group mb-2">
+                            <div class="input-group-append"></div>
+							<select id="choice3" name="products" class="form-control" required>
+								<option value="" disabled selected>Please select a sub-category</option>
+							</select>
+						</div>
+
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                             </div>
 							<input type="text" name="change_in_stock" placeholder="+/-amount (Eg +100)" class="form-control">
 						</div>
 
-						<script language="JavaScript">
-							var lookup = {
-								'Breakfast': ['Local', 'Energy Booster', 'Cereals', 'Jam and Spreads'],
-								'Fruit and Vegetable': ['Fruits', 'Vegetables'],
-								'Beverage': ['Tea', 'Coffee', 'Juice', 'Soft Drinks', 'Water', 'Powder Drinks'],
-								'Meat and Fish': ['Meat', 'Fresh Fish', 'Dried Fish'],
-								'Snacks': ['Noodles', 'Soups', 'Pasta', 'Chocolate', 'Local', 'Chips', 'Popcorn and nuts', 'Biscuits', 'Salad Dressing', 'Sauces'],
-								'Dairy': ['Milk', 'Butter and cream', 'Cheese', 'Powder Milk', 'Yogurt and sweet'],
-								'Frozen': ['Frozen', 'Canned'],
-								'Bakery': ['Cookies', 'Snacks', 'Breads', 'Dips and spreads', 'Honey', 'Cakes'],
-								'Baking Needs': ['Nut and dried fruit', 'Mixes', 'Ingredients', 'FLour'],
-								'Cooking': ['Rice', 'Color and flavours', 'Pickles', 'Oil', 'Ghee', 'Ready Mix', 'Salt and Sugar', 'Dal or lentil', 'Shemai'],
-							};
-							$('#options').on('change', function() {
-								var selectValue = $(this).val();
-								$('#choices').empty();
-								for(i = 0; i < lookup[selectValue].length; i++) {
-									$('#choices').append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
-								}
-							});
-						</script>
-
                         <div class="d-flex justify-content-center mt-3 login_container">
                             <input class="btn login_btn" type="submit" value="Change">
 						</div>
 					</form>
-
 				</div>
-
 
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">
@@ -137,6 +135,65 @@
 			</div>
 		</div>
 	</div>
-</body>
+{% endblock %}
 
-</html>
+
+{% block custom_script %}
+<!--	{% load static %}-->
+<!--    <script language="JavaScript" src="{% static 'js/stock.js' %}"> </script>-->
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script language="JavaScript">
+		var lookup = {
+			'Breakfast': ['Local', 'Energy Booster', 'Cereals', 'Jam and Spreads'],
+			'Fruit and Vegetable': ['Fruits', 'Vegetables'],
+			'Beverage': ['Tea', 'Coffee', 'Juice', 'Soft Drinks', 'Water', 'Powder Drinks'],
+			'Meat and Fish': ['Meat', 'Fresh Fish', 'Dried Fish'],
+			'Snacks': ['Noodles', 'Soups', 'Pasta', 'Chocolate', 'Local', 'Chips', 'Popcorn and nuts', 'Biscuits', 'Salad Dressing', 'Sauces'],
+			'Dairy': ['Milk', 'Butter and cream', 'Cheese', 'Powder Milk', 'Yogurt and sweet'],
+			'Frozen': ['Frozen', 'Canned'],
+			'Bakery': ['Cookies', 'Snacks', 'Breads', 'Dips and spreads', 'Honey', 'Cakes'],
+			'Baking Needs': ['Nut and dried fruit', 'Mixes', 'Ingredients', 'FLour'],
+			'Cooking': ['Rice', 'Color and flavours', 'Pickles', 'Oil', 'Ghee', 'Ready Mix', 'Salt and Sugar', 'Dal or lentil', 'Shemai'],
+			'Baby Food': ['Toddler Foods', 'Milk and Drinks'],
+			'Diabetic Food': ['Diabetic'],
+		};
+
+		$('#choice1').on('change', function() {
+			var selectValue = $(this).val();
+			$('#choice2').empty();
+			for(i = 0; i < lookup[selectValue].length; i++) {
+				$('#choice2').append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
+			}
+		});
+
+		$('#choice2').on('change', function() {
+			var category = $('#choice1').val();
+			var subcategory = $(this).val();
+			$('#choice3').empty();
+
+			$.ajax({
+				url: "{% url 'get_products' %}",
+				data: {
+					'category': category,
+					'subcategory': subcategory
+				},
+				datatype: 'json',
+				success: function(data) {
+					for(i = 0; i < data.length; i++){
+						var product_name = data[i]['product_name'];
+						var product_id = data[i]['product_id'];
+						$('#choice3').append("<option value='" + product_id.toString() + "'>" + product_name + "</option>");
+					}
+				},
+				error: function() {
+					alert("Something went wrong. Reload the page");
+				}
+			});
+		});
+
+		$('#choice3').on('change', function(){
+
+		});
+	</script>
+{% endblock %}
+
