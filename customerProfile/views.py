@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import connection
 from django.shortcuts import redirect
+from cart.views import cart
+
 
 cursor = connection.cursor()
 home_page = 'http://127.0.0.1:8000/'
@@ -12,6 +14,7 @@ def customer_profile(request):
     if 'customer_id' not in request.session:
         return redirect(home_page)
     context = {
+        'customer_id': request.session['customer_id'],
         'customer_name': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'CUSTOMER_NAME']),
         'email': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'EMAIL']),
         'street_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'STREET_NO']),

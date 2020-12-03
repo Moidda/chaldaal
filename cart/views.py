@@ -84,7 +84,13 @@ def index(request):
 
     if cart.is_empty():
         return render(request, 'bag.html')
-    return render(request, 'index.html', {'product': table, 'total_price': cart.total_cost})
+    context = {
+        'customer_id': request.session['customer_id'],
+        'product': table,
+        'total_price': cart.total_cost,
+        'cart_price': cart.total_cost
+    }
+    return render(request, 'index.html', context)
 
 
 
@@ -94,6 +100,7 @@ def checkout(request):
     if 'customer_id' not in request.session:
         return redirect(home_page)
     context = {
+        'customer_id': request.session['customer_id'],
         'customer_name': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'CUSTOMER_NAME']),
         'email': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'EMAIL']),
         'street_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'STREET_NO']),
@@ -130,7 +137,7 @@ def checkout(request):
         })
 
     sql = 'SELECT CUSTOMER_CREDIT FROM CUSTOMER WHERE CUSTOMER_ID = %s'
-    cursor.execute(sql,[request.session['customer_id']])
+    cursor.execute(sql, [request.session['customer_id']])
     result = cursor.fetchall()
     customer_credit = result[0][0]
     context['points'] = customer_credit
@@ -141,6 +148,7 @@ def checkout(request):
         context['used_points'] = 0
 
     context['total_cost'] = cart.total_cost - context['used_points']
+    context['cart_price'] = cart.total_cost - context['used_points']
 
     return render(request, 'checkout.html', context)
 

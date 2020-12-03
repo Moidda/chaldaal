@@ -42,7 +42,7 @@ def popular(request):
     sql = "SELECT * FROM PRODUCT WHERE RATING_BY_CUSTOMER>2 ORDER BY PRODUCT_ID"
     table = get_table(sql)
 
-    return render(request, 'home_page.html', {'product': table})
+    return render(request, 'home_page.html', {'product': table, 'customer_id': request.session['customer_id']})
 
 
 def show_product_category(request, category):
@@ -50,7 +50,7 @@ def show_product_category(request, category):
     category = category.replace('-', ' ')
     sql = "SELECT * FROM PRODUCT WHERE LOWER(CATEGORY) = '%s' ORDER BY PRODUCT_ID" % category
     table = get_table(sql)
-    return render(request, 'home_page.html', {'product': table})
+    return render(request, 'home_page.html', {'product': table, 'customer_id': request.session['customer_id']})
 
 
 def show_product_search(request, searched_item):
@@ -58,7 +58,7 @@ def show_product_search(request, searched_item):
         searched_item = ''
     sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
     table = get_table(sql)
-    return render(request, 'home_page.html', {'product': table})
+    return render(request, 'home_page.html', {'product': table, 'customer_id': request.session['customer_id']})
 
 
 def searched(request):

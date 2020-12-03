@@ -17,7 +17,7 @@ def rating(request):
             'product_name': product_name,
             'rating': cart.rating[pid]
         })
-    return render(request, 'rating.html', {'product': lst})
+    return render(request, 'rating.html', {'product': lst, 'customer_id': request.session['customer_id']})
 
 
 def increase_rating(request, pid):
