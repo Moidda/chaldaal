@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.db import connection
 from django.shortcuts import redirect
 from cart.views import cart
+from django.http import JsonResponse
 
 
 home_page = 'http://127.0.0.1:8000'
@@ -62,7 +63,6 @@ def popular(request):
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
     }
-
     return render(request, 'home_page.html', context)
 
 
@@ -79,7 +79,22 @@ def show_product_category(request, category):
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
     }
+    return render(request, 'home_page.html', context)
 
+
+def show_sub_category(request, sub_category):
+    if 'customer_id' not in request.session:
+        return redirect(log_in)
+
+    sub_category = sub_category.lower()
+    sub_category = sub_category.replace('-', ' ')
+    sql = "SELECT * FROM PRODUCT WHERE LOWER(SUB_CATEGORY) = '%s' ORDER BY PRODUCT_ID" % sub_category
+    table = get_table(sql)
+    context = {
+        'product': table,
+        'customer_id': request.session['customer_id'],
+        'cart_price': cart.total_cost
+    }
     return render(request, 'home_page.html', context)
 
 
@@ -99,6 +114,7 @@ def show_product_search(request, searched_item):
     return render(request, 'home_page.html', context)
 
 
+# is called from the search-form in navbar html
 def searched(request):
     if 'customer_id' in request.session:
         searched_item = str(request.POST.get('searched'))
@@ -107,4 +123,16 @@ def searched(request):
             searched_item = 'none'
         return redirect('http://127.0.0.1:8000/show_product_search/' + searched_item + '/')
 
+
+def get_subcategory_filter(request):
+    categories = request.GET.getlist('categories[]', None)
+    data = []
+    for cat in categories:
+        sql = 'SELECT UNIQUE(SUB_CATEGORY) FROM PRODUCT WHERE CATEGORY = %s'
+        cursor.execute(sql, [cat])
+        result = cursor.fetchall()
+        for row in result:
+            data.append(row[0])
+
+    return JsonResponse(data, safe=False)
 

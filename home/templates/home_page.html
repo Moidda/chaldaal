@@ -1,8 +1,12 @@
-<!-- write main.html -->
-
 {% extends 'main.html' %}
-
 {% block content %}
+
+    <p>
+        <select id="filter" name="filter">
+            <option disabled selected>Sub-category</option>
+        </select>
+        <button id="filter-button" type="button" class="btn btn-info">Filter</button>
+    </p>
 
     <p><h4>Our Products</h4></p>
     <div class="table-responsive">
@@ -45,4 +49,48 @@
             </tbody>
         </table>
     </div>
+{% endblock %}
+
+
+{% block custom_script %}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    {{ product|json_script:"product-data" }}
+    <script language="JavaScript">
+        var product = JSON.parse(document.getElementById('product-data').textContent);
+        var categories = [];
+        for(i = 0; i < product.length; i++){
+            categories.push(product[i].category);
+        }
+        categories = new Set(categories);
+        categories = Array.from(categories);
+        console.log(categories);
+
+        $.ajax({
+            url: "{% url 'get_subcategory_filter' %}",
+            data: {
+                'categories': categories
+            },
+            datatype: 'json',
+            success: function(data) {
+                $('#filter').empty();
+                for(i = 0; i < data.length; i++){
+                    var sub_category = data[i];
+                    $('#filter').append("<option value='" + sub_category + "'>" + sub_category + "</option>");
+                }
+            },
+            error: function() {
+                alert("Something went wrong. Reload the page");
+            }
+        });
+    </script>
+
+    <script>
+        $('#filter-button').click(function(){
+            console.log("button clicked");
+            var subcat = $('#filter').val();
+            subcat = subcat.replace(/\s+/g, '-').toLowerCase();
+            window.location.href = "http://127.0.0.1:8000/sub_category/" + subcat + "/";
+        });
+    </script>
 {% endblock %}
