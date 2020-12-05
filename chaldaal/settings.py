@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'customerProfile',
     'productRating',
     'checkout',
+    'customerHistory',
 ]
 
 MIDDLEWARE = [

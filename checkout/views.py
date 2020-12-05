@@ -8,6 +8,7 @@ from cart.views import cart
 
 home_page = 'http://127.0.0.1:8000'
 cursor = connection.cursor()
+creditSystem = models.Credit()
 
 
 # loads the check out form page with customer information retrieved from
@@ -52,19 +53,18 @@ def checkout(request):
             'to_pay': cnt*price_per_unit
         })
 
-    sql = 'SELECT CUSTOMER_CREDIT FROM CUSTOMER WHERE CUSTOMER_ID = %s'
-    cursor.execute(sql, [request.session['customer_id']])
-    result = cursor.fetchall()
-    customer_credit = result[0][0]
-    context['points'] = customer_credit
+    if creditSystem.total_credits == -1:
+        creditSystem.set_credit(request.session['customer_id'])
 
-    if 'point' in request.session:
-        context['used_points'] = 2*request.session['point']
-    else:
-        context['used_points'] = 0
+    # context['used_points'] = discount due to redeeming credit = 2*redeemed credit
+    # context['total_cost'] = total cost of cart taking credit discount in calculation
+    # context['cart_price'] = price of the cart
+    # context['points'] = remaining customer_credit after redeeming some amount of credit
 
-    context['total_cost'] = cart.total_cost - context['used_points']
+    context['credit_discount'] = creditSystem.redeemed_credits * creditSystem.per_credit_discount
+    context['total_cost'] = cart.total_cost - context['credit_discount']
     context['cart_price'] = cart.total_cost
+    context['points'] = creditSystem.total_credits - creditSystem.redeemed_credits
 
     return render(request, 'checkout.html', context)
 
@@ -89,14 +89,15 @@ def confirm_checkout(request):
 
     ordar_no = (cursor.execute('SELECT MAX(ORDAR_NO) FROM ORDAR').fetchall())[0][0] + 1
 
-    used_bonus = 0
-    if 'point' in request.session:
-        used_bonus = 2*request.session['point']
-
+    used_bonus = creditSystem.redeemed_credits * creditSystem.per_credit_discount
     cart.total_cost -= used_bonus
 
     cursor.callproc('CONFIRM_ORDAR', [ordar_no, request.session['customer_id']])
     cursor.callproc('CONFIRM_PAYMENT', [ordar_no, request.session['customer_id'], cart.total_cost])
+    cursor.callproc('CONFIRM_ORDER_INFO', [
+                        ordar_no, customer_name, street_no, house_no, apt_no,
+                        creditSystem.redeemed_credits, used_bonus
+                    ])
     for pid in cart.products:
         cnt = cart.products[pid]
         cursor.callproc('INSERT_PRODUCTS_IN_ORDAR', [ordar_no, pid, cnt])
@@ -108,28 +109,23 @@ def confirm_checkout(request):
         cursor.callproc('CONFIRM_BKASH', [ordar_no, request.session['customer_id'], transaction_id, bkash_phone_no])
 
     sql = 'UPDATE CUSTOMER SET CUSTOMER_CREDIT = CUSTOMER_CREDIT - %s WHERE CUSTOMER_ID = %s'
-    cursor.execute(sql, [used_bonus, request.session['customer_id']])
+    cursor.execute(sql, [creditSystem.redeemed_credits, request.session['customer_id']])
 
-    if 'point' in request.session:
-        request.session['point'] = 0
+    creditSystem.clear_credit()
 
     return redirect('http://127.0.0.1:8000/rate/')
 
 
-# is called on click 'REDEEM' from checkout page
-# checks validity of the amount of credit point customer
-# is attempting to redeem, recalculates the total cost of cart accordingly
-# reloads the check out form page
+# - is called on click 'REDEEM' from checkout page
+# - checks validity of the amount of credit point customer
+#   is attempting to redeem
+# - recalculates the total cost of cart accordingly
+# - reloads the check out form page
 def using_points(request):
     point = str(request.POST.get('using_points'))
     point = int(point)
 
-    sql = 'SELECT CUSTOMER_CREDIT FROM CUSTOMER WHERE CUSTOMER_ID = %s'
-    cursor.execute(sql, [request.session['customer_id']])
-    result = cursor.fetchall()
-    customer_credit = result[0][0]
-
-    if point <= customer_credit and point >= 0:
-        request.session['point'] = point
+    if 0 <= point <= creditSystem.total_credits and point*creditSystem.per_credit_discount <= cart.total_cost:
+        creditSystem.redeemed_credits = point
 
     return redirect("http://127.0.0.1:8000/checkout/")

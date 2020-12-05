@@ -1,0 +1,98 @@
+{% extends 'main.html' %}
+
+{% block head_extra %}
+{% endblock %}
+
+
+{% block content %}
+
+    <h3>Your Order History</h3>
+
+    {% for data in history_data %}
+        <hr>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                    <h6>Address and Date</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div><h6 class="my-0">Name:</h6></div>
+                            <span class="text-muted">{{ data.customer_name }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div><h6 class="my-0">Street No:</h6></div>
+                            <span class="text-muted">{{ data.street_no }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div><h6 class="my-0">House No:</h6></div>
+                            <span class="text-muted">{{ data.house_no }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div><h6 class="my-0">Apt No:</h6></div>
+                            <span class="text-muted">{{ data.apt_no }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div><h6 class="my-0">Date: </h6></div>
+                            <span class="text-muted">{{ data.date }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                    <h6>Payment Method</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div><h6 class="my-0">{{data.payment_method}}</h6></div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div><h6 class="my-0">{{data.payment_no}}</h6></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                    <h6>Cart</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for p in data.product_list %}
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h6 class="my-0">{{ p.name }}</h6>
+                                    <small class="text-muted">{{p.unit}} {{p.price_per_unit}}TK x{{p.quantity}}</small>
+                                </div>
+                                <span class="text-muted">{{p.to_pay}}</span>
+                            </li>
+                        {% endfor %}
+
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div class="text-success">
+                                <h6 class="my-0">Credit discount</h6>
+                                <small class="text-muted">Used {{data.credits_redeemed}} credit points</small>
+                            </div>
+                            <span class="text-success">- {{data.credits_discount}}</span>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><strong>Total (BDT)</strong></span>
+                            <strong>{{data.total}}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block custom_script %}
+{% endblock %}
