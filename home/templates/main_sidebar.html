@@ -3,6 +3,21 @@
         <ul class="nav flex-column">
             <li><p></p></li>
             <li class="nav-item">
+                <a class="nav-link" href="{% url 'customer_profile' %}">
+                <span data-feather="user"></span>
+                Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'popular' %}">
+                <span data-feather="star"></span>
+                Our Popular Products
+                </a>
+            </li>
+            <li class="nav-item">
+                {% include 'category_dropdown.html' %}
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="http://127.0.0.1:8000/cart/">
                 <span data-feather="shopping-cart"></span>
                     Cart
@@ -12,55 +27,49 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'customer_profile' %}">
-                <span data-feather="users"></span>
-                Profile
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="{% url 'history' %}">
-                <span data-feather="bar-chart-2"></span>
+                <span data-feather="shopping-bag"></span>
                 Order History
                 </a>
             </li>
-            {% if customer_id == 1 %}
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Offers</span>
+        </h6>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                <span data-feather="zap"></span>
+                Flash Sale
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                <span data-feather="gift"></span>
+                Bundle offer
+                </a>
+            </li>
+        </ul>
+
+        {% if customer_id == 1 %}
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Admin</span>
+            </h6>
+            <ul class="nav flex-column mb-2">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'manage_product' %}">
-                    <span data-feather="layers"></span>
+                    <span data-feather="truck"></span>
                     Manage Product
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                    <span data-feather="layers"></span>
+                    <span data-feather="dollar-sign"></span>
                     Manage Offer
                     </a>
                 </li>
-            {% endif %}
-        </ul>
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Offers</span>
-
-        </h6>
-        <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Flash Sale
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'popular' %}">
-                <span data-feather="file-text"></span>
-                Our Popular Products
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Bundle offer
-                </a>
-            </li>
-        </ul>
+            </ul>
+        {% endif %}
     </div>
 </nav>

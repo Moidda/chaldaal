@@ -23,7 +23,10 @@ def get_table(sql):
         price_per_unit = row[4]
         category = row[5]
         sub_category = row[6]
-        rating_by_customer = row[7]
+        rating_by_customer = int(round(row[7]))
+        # rating_by_customer = ['checked' for i in range(rating_by_customer)]
+        # print('product = ' + product_name)
+        # print(rating_by_customer)
         cart_count = 0
         if product_id in cart.products:
             cart_count = cart.products[product_id]
@@ -33,7 +36,8 @@ def get_table(sql):
             'unit': unit,
             'units_in_stock': units_in_stock,
             'price_per_unit': price_per_unit,
-            'category': category, 'sub_category': sub_category,
+            'category': category,
+            'sub_category': sub_category,
             'rating_by_customer': rating_by_customer,
             'cart_count': cart_count
         })
@@ -58,12 +62,13 @@ def popular(request):
 
     sql = "SELECT * FROM PRODUCT WHERE RATING_BY_CUSTOMER>2 ORDER BY PRODUCT_ID"
     table = get_table(sql)
+    table = [table[i: i+3] for i in range(0, len(table), 3)]
     context = {
         'product': table,
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
     }
-    return render(request, 'home_page.html', context)
+    return render(request, 'product_list.html', context)
 
 
 def show_product_category(request, category):
@@ -74,12 +79,13 @@ def show_product_category(request, category):
     category = category.replace('-', ' ')
     sql = "SELECT * FROM PRODUCT WHERE LOWER(CATEGORY) = '%s' ORDER BY PRODUCT_ID" % category
     table = get_table(sql)
+    table = [table[i: i + 3] for i in range(0, len(table), 3)]
     context = {
         'product': table,
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
     }
-    return render(request, 'home_page.html', context)
+    return render(request, 'product_list.html', context)
 
 
 def show_sub_category(request, sub_category):
@@ -90,12 +96,13 @@ def show_sub_category(request, sub_category):
     sub_category = sub_category.replace('-', ' ')
     sql = "SELECT * FROM PRODUCT WHERE LOWER(SUB_CATEGORY) = '%s' ORDER BY PRODUCT_ID" % sub_category
     table = get_table(sql)
+    table = [table[i: i + 3] for i in range(0, len(table), 3)]
     context = {
         'product': table,
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
     }
-    return render(request, 'home_page.html', context)
+    return render(request, 'product_list.html', context)
 
 
 def show_product_search(request, searched_item):
@@ -106,12 +113,14 @@ def show_product_search(request, searched_item):
         searched_item = ''
     sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
     table = get_table(sql)
+    table = [table[i: i+3] for i in range(0, len(table), 3)]
+    print(table)
     context = {
         'product': table,
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
     }
-    return render(request, 'home_page.html', context)
+    return render(request, 'product_list.html', context)
 
 
 # is called from the search-form in navbar html
@@ -135,4 +144,9 @@ def get_subcategory_filter(request):
             data.append(row[0])
 
     return JsonResponse(data, safe=False)
+
+
+def product_list(request):
+    context = {}
+    return render(request, 'product_list.html', context)
 
