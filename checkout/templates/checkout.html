@@ -28,7 +28,7 @@
                         <h6 class="my-0">Credit discount</h6>
                         <small>You have {{points}} credit points</small>
                     </div>
-                    <span class="text-success">- {{used_points}}</span>
+                    <span class="text-success">- {{credit_discount}}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                     <span><strong>Total (BDT)</strong></span>
@@ -63,7 +63,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="email">Email <span class="text-muted">*</span> </label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{email}}" required>
+                        <input type="email" class="form-control" id="email" name="email" value="{{email}}" required readonly>
                         <div class="invalid-feedback">
                             Please enter a valid email address for shipping updates.
                         </div>

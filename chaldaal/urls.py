@@ -26,4 +26,5 @@ urlpatterns = [
     path('rate/', include('productRating.urls')),
     path('checkout/', include('checkout.urls')),
     path('manage_offers/', include('offers.urls')),
+    path('history/', include('customerHistory.urls')),
 ]

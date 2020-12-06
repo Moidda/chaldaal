@@ -18,6 +18,7 @@ def add_item(request, product_id):
         return redirect(home_page)
 
     units_in_stock = (cursor.execute('SELECT UNITS_IN_STOCK FROM PRODUCT WHERE PRODUCT_ID = %s', [product_id]).fetchall())[0][0]
+    print("units in stock = " + str(units_in_stock))
     if units_in_stock:
         cart.add_product(product_id)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
