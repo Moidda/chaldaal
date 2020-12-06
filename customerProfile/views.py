@@ -33,7 +33,7 @@ def customer_profile(request):
     for key in context:
         if not context[key]:
             context[key] = ''
-
+    print("customer credit =" + str(context['customer_credit']))
     return render(request, 'profile_index.html', context)
 
 

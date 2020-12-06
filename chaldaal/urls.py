@@ -25,4 +25,5 @@ urlpatterns = [
     path('profile/', include('customerProfile.urls')),
     path('rate/', include('productRating.urls')),
     path('checkout/', include('checkout.urls')),
+    path('manage_offers/', include('offers.urls')),
 ]
