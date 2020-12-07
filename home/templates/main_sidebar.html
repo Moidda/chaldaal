@@ -21,9 +21,11 @@
                 <a class="nav-link" href="http://127.0.0.1:8000/cart/">
                 <span data-feather="shopping-cart"></span>
                     Cart
-                    {% if cart_price %}
-                        <b>({{cart_price}} BDT)</b>
-                    {% endif %}
+                    <b id="cart-price">
+                        {% if cart_price %}
+                            ({{cart_price}} BDT)
+                        {% endif %}
+                    </b>
                 </a>
             </li>
             <li class="nav-item">

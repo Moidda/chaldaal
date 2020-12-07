@@ -39,12 +39,18 @@
                             <span id="{{p.product_id}}_5" class="fa fa-star"></span>
                         </p>
                         {% if p.units_in_stock %}
-                            <a href="http://127.0.0.1:8000/cart/add_item/{{p.product_id}}/" class="btn btn-primary">
+<!--                            <a href="http://127.0.0.1:8000/cart/add_item/{{p.product_id}}/" class="btn btn-primary">-->
+<!--                                Add in bag-->
+<!--                                {% if p.cart_count %}-->
+<!--                                    x{{p.cart_count}}-->
+<!--                                {% endif %}-->
+<!--                            </a>-->
+                            <button id="product_id-{{p.product_id}}" type="button" class="btn btn-primary">
                                 Add in bag
                                 {% if p.cart_count %}
                                     x{{p.cart_count}}
                                 {% endif %}
-                            </a>
+                            </button>
                         {% else %}
                             <button type="button" class="btn btn-dark">Out of stock</button>
                         {% endif %}
@@ -103,6 +109,36 @@
             var subcat = $('#filter').val();
             subcat = subcat.replace(/\s+/g, '-').toLowerCase();
             window.location.href = "http://127.0.0.1:8000/sub_category/" + subcat + "/";
+        });
+    </script>
+
+    <script language="JavaScript">
+        $(document).ready(function(){
+
+            $('.btn-primary').on('click', function(){
+                var btnId = $(this).attr("id");
+                var arr = btnId.split('-');
+                var pid = arr[1];
+
+                req = $.ajax({
+                    url: "{% url 'add_item' %}",
+                    dataType: 'json',
+                    data: {
+                        'product_id': pid
+                    }
+                });
+                req.done(function(data){
+                    var txt = 'Add in bag';
+                    if(data.cart_count)
+                        txt = txt + ' x' + data.cart_count;
+                    $('#product_id-'+pid).text(txt);
+
+                    txt = '';
+                    if(data.cart_price) txt = '(' + data.cart_price + ') BDT';
+                    $('#cart-price').text(txt);
+                });
+            });
+
         });
     </script>
 {% endblock %}

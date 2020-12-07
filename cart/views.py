@@ -1,7 +1,7 @@
 # THIS IS THE AJAXIFY BRANCH UwU
 
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db import connection
 from django.shortcuts import redirect
 from . import models
@@ -15,14 +15,20 @@ cursor = connection.cursor()
 # when user adds an item in the cart from the home page
 # the url 'cart/add_item/<product_id>' is called from home_page.html
 # redirects to the previous page (the page/address it came from)
-def add_item(request, product_id):
+def add_item(request):
     if 'customer_id' not in request.session:
         return redirect(home_page)
 
+    product_id = int(request.GET.get('product_id'))
     units_in_stock = (cursor.execute('SELECT UNITS_IN_STOCK FROM PRODUCT WHERE PRODUCT_ID = %s', [product_id]).fetchall())[0][0]
     if units_in_stock:
         cart.add_product(product_id)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    print("db updated. cart updated")
+    data = {
+        'cart_count': cart.products[product_id],
+        'cart_price': cart.total_cost
+    }
+    return JsonResponse(data)
 
 
 # increase an item from the cart page
