@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import connection
+from django.http import JsonResponse
 from cart.views import cart
 from . import models
 
@@ -30,17 +31,22 @@ def rating(request):
     return render(request, 'rating.html', context)
 
 
-def increase_rating(request, pid):
+def increase_rating(request):
+    pid = int(request.GET.get('product_id'))
     ratingSystem.increase_rating(pid)
-    return redirect('http://127.0.0.1:8000/rate/')
+    data = {'rating': ratingSystem.rating[pid]}
+    return JsonResponse(data)
 
 
-def decrease_rating(request, pid):
+def decrease_rating(request):
+    pid = int(request.GET.get('product_id'))
     ratingSystem.decrease_rating(pid)
-    return redirect('http://127.0.0.1:8000/rate/')
+    data = {'rating': ratingSystem.rating[pid]}
+    return JsonResponse(data)
 
 
 def save_rating(request):
     ratingSystem.save_rating()
     return redirect(home_page)
+
 
