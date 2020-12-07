@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db import connection
 from django.shortcuts import redirect
 from cart.views import cart
@@ -17,6 +17,7 @@ def customer_profile(request):
         'customer_id': request.session['customer_id'],
         'customer_name': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'CUSTOMER_NAME']),
         'email': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'EMAIL']),
+        'phone_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'PHONE_NO']),
         'street_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'STREET_NO']),
         'house_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'HOUSE_NO']),
         'apt_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'APT_NO']),
@@ -34,11 +35,22 @@ def customer_profile(request):
         if not context[key]:
             context[key] = ''
 
+    cursor.execute('SELECT EMAIL FROM CUSTOMER WHERE CUSTOMER_ID <> %s', [request.session['customer_id']])
+    result = cursor.fetchall()
+    db_emails = [lst[0] for lst in result]
+    context['db_emails'] = db_emails
+
+    cursor.execute('SELECT PHONE_NUMBER FROM CUSTOMER_PHONE WHERE CUSTOMER_ID <> %s', [request.session['customer_id']])
+    result = cursor.fetchall()
+    db_phone_nos = [lst[0] for lst in result]
+    context['db_phone_nos'] = db_phone_nos
+
     return render(request, 'profile_index.html', context)
 
 
-# retrieves from profile Form/page, saves changes in DB
-# reloads the page
+# - retrieves from profile Form/page,
+# - saves changes in DB
+# - reloads the page
 def save_changes(request):
     if 'customer_id' not in request.session:
         return redirect(home_page)
@@ -46,6 +58,7 @@ def save_changes(request):
     if request.method == 'POST':
         customer_name = str(request.POST.get("customer_name"))
         email = str(request.POST.get("email"))
+        phone_no = str(request.POST.get("phone_no"))
         street_no = str(request.POST.get("street_no"))
         house_no = str(request.POST.get("house_no"))
         apt_no = str(request.POST.get("apt_no"))
@@ -55,7 +68,7 @@ def save_changes(request):
         card_no = str(request.POST.get("card_no"))
         bkash_phone_no = str(request.POST.get("bkash_phone_no"))
 
-        cursor.callproc('UPDATE_CUSTOMER_INFO', [request.session['customer_id'], customer_name, email, street_no, house_no, apt_no])
+        cursor.callproc('UPDATE_CUSTOMER_INFO', [request.session['customer_id'], customer_name, email, phone_no, street_no, house_no, apt_no])
         cursor.callproc('UPDATE_CUSTOMER_PAYMENT_INFO', [request.session['customer_id'], username, bank, card_type, card_no, bkash_phone_no])
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -37,7 +37,8 @@
 							</div>
 
 							<div class="col-md-6 mb-3">
-								<label >Phone No <span class="text-muted">(Optional)</span> </label>
+								<label>Phone No <span class="text-muted">(Optional)</span> </label>
+								<input type="text" class="form-control" id="phone_no" name="phone_no" value="{{phone_no}}">
 							</div>
 						</div>
 
@@ -103,5 +104,57 @@
 			</div>
 		</div>
 		<p></p>
+{% endblock %}
+
+{% block custom_script %}
+
+	{{ db_emails|json_script:"db_emails" }}
+	{{ db_phone_nos|json_script:"db_phone_nos" }}
+	<script language="JavaScript">
+		(function () {
+			'use strict'
+
+			window.addEventListener('load', function () {
+			var forms = document.getElementsByClassName('needs-validation')
+
+<!--			Loop over forms and prevent submission -->
+			Array.prototype.filter.call(forms, function (form) {
+				form.addEventListener('submit', function (event) {
+					var validated = form.checkValidity();
+
+					var email = document.getElementById("email");
+					var db_emails = JSON.parse(document.getElementById('db_emails').textContent);
+					for(i = 0; i < db_emails.length; i++){
+						if(email.value == db_emails[i]){
+							validated = false;
+							alert("Email already in use");
+						}
+					}
+
+					var phone_no = document.getElementById("phone_no");
+					var db_phone_nos = JSON.parse(document.getElementById('db_phone_nos').textContent);
+					for(i = 0; i < db_phone_nos.length; i++){
+						if(phone_no.value == db_phone_nos[i]){
+							validated = false;
+							alert("Phone no already in use");
+						}
+					}
+
+					var inputElements = document.getElementsByTagName("input");
+					for(var i = 0; i < inputElements.length; i++)
+						if(inputElements[i].required && !Boolean(inputElements[i].value))
+							validated = false;
+
+					if (validated === false) {
+						event.preventDefault();
+						event.stopPropagation();
+					}
+
+					form.classList.add('was-validated')
+				}, false)
+				})
+			}, false)
+		})()
+	</script>
 {% endblock %}
 

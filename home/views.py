@@ -24,9 +24,6 @@ def get_table(sql):
         category = row[5]
         sub_category = row[6]
         rating_by_customer = int(round(row[7]))
-        # rating_by_customer = ['checked' for i in range(rating_by_customer)]
-        # print('product = ' + product_name)
-        # print(rating_by_customer)
         cart_count = 0
         if product_id in cart.products:
             cart_count = cart.products[product_id]
@@ -114,7 +111,6 @@ def show_product_search(request, searched_item):
     sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
     table = get_table(sql)
     table = [table[i: i+3] for i in range(0, len(table), 3)]
-    print(table)
     context = {
         'product': table,
         'customer_id': request.session['customer_id'],

@@ -1,22 +1,25 @@
 from django.shortcuts import render, redirect
-from cart.views import cart
 from django.db import connection
-from django.http import HttpResponse
 from cart.views import cart
+from . import models
 
 
 cursor = connection.cursor()
 home_page = 'http://127.0.0.1:8000/'
+ratingSystem = models.RatingSystem()
 
 
 def rating(request):
+    if 'customer_id' not in request.session:
+        redirect(home_page)
+
     lst = []
-    for pid in cart.products:
+    for pid in ratingSystem.rating:
         product_name = (cursor.execute('SELECT PRODUCT_NAME FROM PRODUCT WHERE PRODUCT_ID = %s', [pid]).fetchall())[0][0]
         lst.append({
             'product_id': pid,
-            'product_name': product_name,
-            'rating': cart.rating[pid]
+            'rating': ratingSystem.rating[pid],
+            'product_name': product_name
         })
 
     context = {
@@ -24,23 +27,20 @@ def rating(request):
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
     }
-
     return render(request, 'rating.html', context)
 
 
 def increase_rating(request, pid):
-    cart.increase_rating(product_id=pid)
+    ratingSystem.increase_rating(pid)
     return redirect('http://127.0.0.1:8000/rate/')
 
 
 def decrease_rating(request, pid):
-    cart.decrease_rating(product_id=pid)
+    ratingSystem.decrease_rating(pid)
     return redirect('http://127.0.0.1:8000/rate/')
 
 
 def save_rating(request):
-    for pid in cart.rating:
-        cursor.callproc('UPDATE_PRODUCT_RATING', [pid, cart.rating[pid]])
-    cart.clear_cart()
+    ratingSystem.save_rating()
     return redirect(home_page)
 

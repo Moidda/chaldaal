@@ -4,6 +4,7 @@ from django.db import connection
 from django.shortcuts import redirect
 from . import models
 from cart.views import cart
+from productRating.views import ratingSystem
 
 
 home_page = 'http://127.0.0.1:8000'
@@ -20,6 +21,7 @@ def checkout(request):
         'customer_id': request.session['customer_id'],
         'customer_name': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'CUSTOMER_NAME']),
         'email': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'EMAIL']),
+        'phone_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'PHONE_NO']),
         'street_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'STREET_NO']),
         'house_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'HOUSE_NO']),
         'apt_no': cursor.callfunc('GET_CUSTOMER', str, [request.session['customer_id'], 'APT_NO']),
@@ -55,11 +57,6 @@ def checkout(request):
 
     if creditSystem.total_credits == -1:
         creditSystem.set_credit(request.session['customer_id'])
-
-    # context['used_points'] = discount due to redeeming credit = 2*redeemed credit
-    # context['total_cost'] = total cost of cart taking credit discount in calculation
-    # context['cart_price'] = price of the cart
-    # context['points'] = remaining customer_credit after redeeming some amount of credit
 
     context['credit_discount'] = creditSystem.redeemed_credits * creditSystem.per_credit_discount
     context['total_cost'] = cart.total_cost - context['credit_discount']
@@ -112,6 +109,8 @@ def confirm_checkout(request):
     cursor.execute(sql, [creditSystem.redeemed_credits, request.session['customer_id']])
 
     creditSystem.clear_credit()
+    ratingSystem.createRatingSystem(cart.products)
+    cart.clear_cart()
 
     return redirect('http://127.0.0.1:8000/rate/')
 

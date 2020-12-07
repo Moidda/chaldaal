@@ -1,3 +1,40 @@
-Thank you for mashing my potato for me.
-Yours,
-Mehedi
+ ----------Changes in DDL------------
+DROP TABLE CUSTOMER_PHONE;
+CREATE TABLE CUSTOMER_PHONE
+(
+    CUSTOMER_ID     INT						NOT NULL,
+    PHONE_NUMBER    VARCHAR(20)		NULL,
+	
+	CONSTRAINT CUSTOMER_PHONE_PK PRIMARY KEY (CUSTOMER_ID),
+	CONSTRAINT CUSTOMER_PHONE_FK FOREIGN KEY(CUSTOMER_ID) REFERENCES CUSTOMER(CUSTOMER_ID) ON DELETE CASCADE
+);
+
+
+ ----------Changes in function------------
+GET_CUSTOMER.sql
+
+ ----------Changes in procedure------------
+UPDATE_CUSTOMER_INFO.sql
+
+
+
+Short-comings:
+1) Manage Product ->
+   Admin jodi kono product insert korar shomoy vul tottho diye insert kore,
+   tahole shei vul thik korar upay nai kono
+    -> Product insert kore felar pore delete korar option nai
+    -> Product info (price per unit, name) edit korar option nai
+       (shudhu stock edit kora jay)
+
+2) Sidebar not sticky -> (unsolvable)
+        Page scroll kore niche namanor pore reload deya hole sidebar non-sticky
+        hoye jay
+
+3) "Add in Bag" press korle page auto-refresh hoye jay. Page er nicher diker kono
+   product ekadhikbar add in bag korte gele barbar page refresh hoye page uporer dike
+   chole jay, notun kore abar scroll down kora lage.
+
+4) Same as 3, checkout pagea points redeem korle page auto-refresh hoye jay. Checkout forme
+   kono info edit kora thakle refresh er fole shei data chole jay, notun kore input deya lage
+
+
