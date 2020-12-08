@@ -9,15 +9,17 @@ from cart.views import cart
 home_page = 'http://127.0.0.1:8000/'
 cursor = connection.cursor()
 
+
 def manage_offers(request):
     if 'customer_id' not in request.session:
         return redirect(home_page)
-    if request.session['customer_id'] == 1 :
+    if request.session['customer_id'] == 1:
         context = {
             'customer_id': request.session['customer_id'],
             'cart_price': cart.total_cost
         }
         return render(request, 'manage_offers.html', context)
+
 
 def create_flash_sale(request):
     product_id = str(request.POST.get("products"))
@@ -25,7 +27,7 @@ def create_flash_sale(request):
 
     percent_off = int(percent_off)
 
-    sql = 'SELECT MAX(SALE_ID) FROM FLASH_SALE'
+    sql = 'SELECT NVL(MAX(SALE_ID), 0) FROM FLASH_SALE'
     cursor.execute(sql)
     result = cursor.fetchall()
     max_sale_id = int(result[0][0])
@@ -39,6 +41,7 @@ def create_flash_sale(request):
     cursor.execute(sql, [max_sale_id+1, product_id, percent_off])
 
     return redirect("http://127.0.0.1:8000/manage_offers/")
+
 
 def sale_list(request):
     if 'customer_id' not in request.session:
@@ -83,6 +86,7 @@ def sale_list(request):
     }
 
     return render(request, 'sale_list.html', context)
+
 
 def end_sale(request,flash_sale_id):
     sql = '''

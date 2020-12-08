@@ -4,13 +4,11 @@
 
 {% block content %}
 
-    <p><h4>Our Products</h4></p>
+    <p><h4>Sale List</h4></p>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
                 <tr>
-                    <th>FLASH SALE ID</th>
-                    <th>PRODUCT ID</th>
                     <th>Name</th>
                     <th>Previous Price</th>
                     <th>Discounted Price</th>
@@ -22,8 +20,6 @@
             <tbody>
                 {% for f in flash_sale %}
                     <tr>
-                        <td> {{f.flash_sale_id}}</td>
-                        <td>{{f.flash_sale_product_id}}</td>
                         <td>{{f.flash_sale_product_name}}</td>
                         <td>{{f.flash_sale_previous_price}}</td>
                         <td>{{f.flash_sale_discounted_price}}</td>

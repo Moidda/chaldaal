@@ -53,22 +53,14 @@ def stock(request):
 
 
 def change_stock(request):
+    if 'customer_id' not in request.session or request.session['customer_id'] != 1:
+        return  redirect(home_page)
+
     product_id = str(request.POST.get("products"))
     change_in_stock = str(request.POST.get("change_in_stock"))
-
-    operation = change_in_stock[0]
-    value = change_in_stock[1:]
-    value = int(value)
-
-    if operation == '+':
-        sql = 'UPDATE PRODUCT SET UNITS_IN_STOCK = UNITS_IN_STOCK + %s WHERE PRODUCT_ID = %s'
-        cursor.execute(sql, [value, product_id])
-    else:
-        cursor.execute('SELECT UNITS_IN_STOCK FROM PRODUCT WHERE PRODUCT_ID = %s', [product_id])
-        in_stock = (cursor.fetchall())[0][0]
-        value = min(in_stock, value)
-        sql = 'UPDATE PRODUCT SET UNITS_IN_STOCK = UNITS_IN_STOCK - %s WHERE PRODUCT_ID = %s'
-        cursor.execute(sql, [value, product_id])
+    change_in_stock = int(change_in_stock)
+    sql = 'UPDATE PRODUCT SET UNITS_IN_STOCK = UNITS_IN_STOCK + %s WHERE PRODUCT_ID = %s'
+    cursor.execute(sql, [change_in_stock, product_id])
 
     return redirect("http://127.0.0.1:8000/manage_product/stock/")
 

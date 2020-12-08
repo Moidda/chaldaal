@@ -26,7 +26,12 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">{{p.product_name}}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{p.sub_category}}</h6>
-                        <p>&nbsp;</p>
+                        <p class="card-text text-center">&nbsp;</p>
+                        <p class="card-text text-center">
+                            {% if customer_id == 1 %}
+                                Stock: {{p.units_in_stock}}
+                            {% endif %}
+                        </p>
                         <p class="card-text text-center">{{p.unit}}</p>
                         <p class="card-text text-center font-weight-bold">
                             {{p.price_per_unit}}
@@ -39,12 +44,6 @@
                             <span id="{{p.product_id}}_5" class="fa fa-star"></span>
                         </p>
                         {% if p.units_in_stock %}
-<!--                            <a href="http://127.0.0.1:8000/cart/add_item/{{p.product_id}}/" class="btn btn-primary">-->
-<!--                                Add in bag-->
-<!--                                {% if p.cart_count %}-->
-<!--                                    x{{p.cart_count}}-->
-<!--                                {% endif %}-->
-<!--                            </a>-->
                             <button id="product_id-{{p.product_id}}" type="button" class="btn btn-primary">
                                 Add in bag
                                 {% if p.cart_count %}
@@ -53,6 +52,9 @@
                             </button>
                         {% else %}
                             <button type="button" class="btn btn-dark">Out of stock</button>
+                        {% endif %}
+                        {% if customer_id == 1 %}
+                            <button type="button" class="btn btn-info">Admin</button>
                         {% endif %}
                     </div>
                 </div>
