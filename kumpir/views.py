@@ -12,7 +12,11 @@ cursor = connection.cursor()
 
 def manage_product(request):
     if 'customer_id' in request.session and request.session['customer_id'] == 1:
-        return render(request, 'manage_product.html', {'customer_id': request.session['customer_id']})
+        context = {
+            'customer_id': request.session['customer_id'],
+            'cart_price': cart.total_cost
+        }
+        return render(request, 'manage_product.html', context)
     return redirect(home_page)
 
 

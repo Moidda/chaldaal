@@ -1,0 +1,105 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Product Details</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 order-md-1">
+            <form method="POST" id="checkout_form" action="{% url 'save_admin_changes' product_id %}">
+                {%csrf_token%}
+                <div class="mb-3">
+                    <label>Name <span class="text-muted">*</span> </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="product_name" name="product_name" value="{{product_name}}" required/>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Product name is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>Unit <span class="text-muted">*</span> </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="unit" name="unit" value="{{unit}}" required/>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Product unit is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label id="label-stock">Stock</label>
+                        <input type="number" class="form-control" id="units_in_stock" name="units_in_stock" value="{{units_in_stock}}" required readonly>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Add amount</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="change_units_in_stock" name="change_units_in_stock" />
+                            <button id="change-stock-button" type="button" class="btn btn-info">Change</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label>Price<span class="text-muted">*</span> </label>
+                        <input type="number" class="form-control" id="price_per_unit" name="price_per_unit" value="{{price_per_unit}}" required>
+                        <div class="invalid-feedback">
+                            Give product a price
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label id="label-discount">Discounted Price</label>
+                        <input type="number" class="form-control" id="discounted_price" name="discounted_price" value="{{discounted_price}}" readonly />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label>Sale</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="percent_off" name="percent_off" value="{{percent_off}}" />
+                            <button id="percent_off-button" type="button" class="btn btn-info">Set sale</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Add in current Bundle</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="bundle_amount" name="bundle_amount" placeholder="Amount"/>
+                            <button type="button" class="btn btn-info">Add</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="mb-4">
+                <button class="btn btn-primary btn-lg btn-block" id="submit_btn" type="submit">Save changes</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block custom_script %}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script language="JavaScript">
+        $(document).ready(function(){
+
+            $('#change-stock-button').on('click', function(){
+                var delta = parseInt($('#change_units_in_stock').val()) || 0;
+                var currentStock = parseInt($('#units_in_stock').val()) || 0;
+                var newStock = currentStock + delta;
+                if(newStock < 0) newStock = 0;
+                $('#units_in_stock').val(newStock);
+                $('#label-stock').text("Stock (Save changes)");
+            });
+
+            $('#percent_off-button').on('click', function(){
+                var percent_off = parseInt($('#percent_off').val()) || 0;
+                var price = parseInt($('#price_per_unit').val()) || 0;
+                var discountedPrice = parseInt(price*(100-percent_off) / 100);
+                $('#discounted_price').val(discountedPrice);
+                $('#label-discount').text("Discounted Price (Save changes)");
+            });
+
+        });
+    </script>
+{% endblock %}

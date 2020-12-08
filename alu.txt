@@ -17,6 +17,10 @@ GET_CUSTOMER.sql
 UPDATE_CUSTOMER_INFO.sql
 
 
+REMAINDER:
+Calculations of discounted price is done by following python expression:
+    discounted_price = price_per_unit * percent_off // 100
+
 
 Short-comings:
 1) Manage Product ->
@@ -32,6 +36,9 @@ Short-comings:
 
 3) Checkout pagea points redeem korle page auto-refresh hoye jay. Checkout forme
    kono info edit kora thakle refresh er fole shei data chole jay, notun kore input deya lage
+
+4) Creating a new sale on a product that already has an existing sale, might create problems
+   in the backend
 
 
 TODO:
