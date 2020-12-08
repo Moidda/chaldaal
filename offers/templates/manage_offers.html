@@ -1,0 +1,199 @@
+{% extends 'main.html' %}
+
+
+{% block head_extra %}
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			background: #7abecc !important;
+		}
+		.user_card {
+			width: 350px;
+			margin-top: auto;
+			margin-bottom: auto;
+			background: #74cfbf;
+			position: relative;
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
+			padding: 10px;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			border-radius: 5px;
+
+		}
+
+		.form_container {
+			margin-top: 20px;
+		}
+
+		#form-title{
+			color: #fff;
+
+		}
+
+		.login_btn {
+			width: 100%;
+			background: #33ccff !important;
+			color: white !important;
+		}
+		.login_btn:focus {
+			box-shadow: none !important;
+			outline: 0px !important;
+		}
+		.login_container {
+			padding: 0 2rem;
+		}
+		.input-group-text {
+			background: #f7ba5b !important;
+			color: white !important;
+			border: 0 !important;
+			border-radius: 0.25rem 0 0 0.25rem !important;
+		}
+		.input_user,
+		.input_pass:focus {
+			box-shadow: none !important;
+			outline: 0px !important;
+		}
+
+		#messages{
+			background-color: grey;
+			color: #fff;
+			padding: 10px;
+			margin-top: 10px;
+		}
+	</style>
+{% endblock %}
+
+
+{% block content %}
+	<div class="container h-50">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<h3 id="form-title">Create Flash Sale</h3>
+				</div>
+				<div class="d-flex justify-content-center form_container">
+					<form id="form" method="POST" action= "percent_off/"  >
+                        {% csrf_token %}
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-append"></div>
+							<select id="choice1" name="category" class="form-control" required>
+								<option disabled selected hidden>Category</option>
+								<option value="Breakfast">Breakfast</option>
+								<option value="Fruit and Vegetable">Fruit and Vegetable</option>
+								<option value="Beverage">Beverage</option>
+								<option value="Meat and Fish">Meat and Fish</option>
+								<option value="Snacks">Snacks</option>
+								<option value="Dairy">Dairy</option>
+								<option value="Frozen">Frozen</option>
+								<option value="Bakery">Bakery</option>
+								<option value="Baking Needs">Baking Needs</option>
+								<option value="Cooking">Cooking</option>
+								<option value="Baby Food">Baby Food</option>
+								<option value="Diabetic Food">Diabetic Food</option>
+							</select>
+						</div>
+
+						<div class="input-group mb-2">
+                            <div class="input-group-append"></div>
+							<select id="choice2" name="sub_category" class="form-control" required>
+								<option value="" disabled selected>Sub-category</option>
+							</select>
+						</div>
+
+						<div class="input-group mb-2">
+                            <div class="input-group-append"></div>
+							<select id="choice3" name="products" class="form-control" required>
+								<option value="" disabled selected>Product</option>
+							</select>
+						</div>
+
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                            </div>
+							<input type="text" name="percent_off" placeholder="Percentage off(Eg 10)" class="form-control">
+						</div>
+
+                        <div class="d-flex justify-content-center mt-3 login_container">
+                            <input class="btn login_btn" type="submit" value="Change">
+						</div>
+					</form>
+				</div>
+
+				<div class="mt-4">
+					<div class="d-flex justify-content-center links">
+						End a sale? <a href="sale_list/" class="ml-2">Click here</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+
+{% block custom_script %}
+<!--	{% load static %}-->
+<!--    <script language="JavaScript" src="{% static 'js/stock.js' %}"> </script>-->
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script language="JavaScript">
+		var lookup = {
+			'Breakfast': ['Local', 'Energy Booster', 'Cereals', 'Jam and Spreads'],
+			'Fruit and Vegetable': ['Fruits', 'Vegetables'],
+			'Beverage': ['Tea', 'Coffee', 'Juice', 'Soft Drinks', 'Water', 'Powder Drinks'],
+			'Meat and Fish': ['Meat', 'Fresh Fish', 'Dried Fish'],
+			'Snacks': ['Noodles', 'Soups', 'Pasta', 'Chocolate', 'Local', 'Chips', 'Popcorn and nuts', 'Biscuits', 'Salad Dressing', 'Sauces'],
+			'Dairy': ['Milk', 'Butter and cream', 'Cheese', 'Powder Milk', 'Yogurt and sweet'],
+			'Frozen': ['Frozen', 'Canned'],
+			'Bakery': ['Cookies', 'Snacks', 'Breads', 'Dips and spreads', 'Honey', 'Cakes'],
+			'Baking Needs': ['Nut and dried fruit', 'Mixes', 'Ingredients', 'FLour'],
+			'Cooking': ['Rice', 'Color and flavours', 'Pickles', 'Oil', 'Ghee', 'Ready Mix', 'Salt and Sugar', 'Dal or lentil', 'Shemai'],
+			'Baby Food': ['Toddler Foods', 'Milk and Drinks'],
+			'Diabetic Food': ['Diabetic'],
+		};
+
+		$('#choice1').on('change', function() {
+			var selectValue = $(this).val();
+			$('#choice2').empty();
+			for(i = 0; i < lookup[selectValue].length; i++) {
+				$('#choice2').append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
+			}
+		});
+
+		$('#choice2').on('change', function() {
+			var category = $('#choice1').val();
+			var subcategory = $(this).val();
+			$('#choice3').empty();
+
+			$.ajax({
+				url: "{% url 'get_products' %}",
+				data: {
+					'category': category,
+					'subcategory': subcategory
+				},
+				datatype: 'json',
+				success: function(data) {
+					for(i = 0; i < data.length; i++){
+						var product_name = data[i]['product_name'];
+						var product_id = data[i]['product_id'];
+						$('#choice3').append("<option value='" + product_id.toString() + "'>" + product_name + "</option>");
+					}
+				},
+				error: function() {
+					alert("Something went wrong. Reload the page");
+				}
+			});
+		});
+
+		$('#choice3').on('change', function(){
+
+		});
+	</script>
+{% endblock %}
+
