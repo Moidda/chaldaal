@@ -30,11 +30,19 @@ Short-comings:
         Page scroll kore niche namanor pore reload deya hole sidebar non-sticky
         hoye jay
 
-3) "Add in Bag" press korle page auto-refresh hoye jay. Page er nicher diker kono
-   product ekadhikbar add in bag korte gele barbar page refresh hoye page uporer dike
-   chole jay, notun kore abar scroll down kora lage.
-
-4) Same as 3, checkout pagea points redeem korle page auto-refresh hoye jay. Checkout forme
+3) Checkout pagea points redeem korle page auto-refresh hoye jay. Checkout forme
    kono info edit kora thakle refresh er fole shei data chole jay, notun kore input deya lage
+
+
+TODO:
+1) Customers should able to see flash sale list.
+2) Customers should be able to see discounted price of sale on product list
+3) Kumpir should be able to edit any product information
+   (Currently, kumpir can only edit stock of product
+    Uneditable product information containts name, unit, price per unit, cat and subcat)
+4) Bundle offer
+	-?? Kumpir should be able to include an item from product lists into bundle offer
+	    similar to cart system. And then can create the bundle offer with the products
+	    selected, similar to the checkout system of a cart
 
 
