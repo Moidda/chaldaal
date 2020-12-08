@@ -19,8 +19,7 @@ UPDATE_CUSTOMER_INFO.sql
 
 REMAINDER:
 Calculations of discounted price is done by following python expression:
-    discounted_price = price_per_unit * percent_off // 100
-
+    price_per_unit - (price_per_unit * percent_discount // 100)
 
 Short-comings:
 1) Manage Product ->
@@ -42,14 +41,12 @@ Short-comings:
 
 
 TODO:
-1) Customers should able to see flash sale list.
-2) Customers should be able to see discounted price of sale on product list
-3) Kumpir should be able to edit any product information
-   (Currently, kumpir can only edit stock of product
-    Uneditable product information containts name, unit, price per unit, cat and subcat)
-4) Bundle offer
+
+1) Bundle offer
 	-?? Kumpir should be able to include an item from product lists into bundle offer
 	    similar to cart system. And then can create the bundle offer with the products
 	    selected, similar to the checkout system of a cart
+
+price_per_unit - (price_per_unit * percent_discount // 100)
 
 

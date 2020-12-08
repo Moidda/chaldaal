@@ -34,7 +34,11 @@
                         </p>
                         <p class="card-text text-center">{{p.unit}}</p>
                         <p class="card-text text-center font-weight-bold">
-                            {{p.price_per_unit}}
+                            {% if p.percent_discount > 0 %}
+                                <h6><strike>{{p.price_per_unit}}</strike> {{p.discounted_price}}</h6>
+                            {% elif p.percent_discount == 0 %}
+                                 <h6>{{p.price_per_unit}}</h6>
+                            {% endif %}
                         </p>
                         <p>
                             <span id="{{p.product_id}}_1" class="fa fa-star"></span>

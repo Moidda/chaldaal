@@ -24,21 +24,9 @@ def manage_offers(request):
 def create_flash_sale(request):
     product_id = str(request.POST.get("products"))
     percent_off = str(request.POST.get("percent_off"))
-
     percent_off = int(percent_off)
 
-    sql = 'SELECT NVL(MAX(SALE_ID), 0) FROM FLASH_SALE'
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    max_sale_id = int(result[0][0])
-
-    sql = '''
-            INSERT INTO FLASH_SALE
-            (SALE_ID,PRODUCT_ID,PERCENT_DISCOUNT,START_DATE,AVAILABILITY)
-            VALUES
-            (%s,%s,%s,SYSDATE,'Y')
-    '''
-    cursor.execute(sql, [max_sale_id+1, product_id, percent_off])
+    cursor.callproc('CHECKING_FLASH_SALE', [product_id, percent_off])
 
     return redirect("http://127.0.0.1:8000/manage_offers/")
 
@@ -51,7 +39,7 @@ def sale_list(request):
             P.PRODUCT_ID,
             P.PRODUCT_NAME,
             P.PRICE_PER_UNIT AS PREVIOUS_PRICE,
-            (P.PRICE_PER_UNIT - P.PRICE_PER_UNIT * F.PERCENT_DISCOUNT/100) AS DISCOUNTED_PRICE,
+            F.PERCENT_DISCOUNT,
             P.CATEGORY,
             P.SUB_CATEGORY
             FROM PRODUCT P,FLASH_SALE F
@@ -65,7 +53,8 @@ def sale_list(request):
         product_id = row[1]
         product_name = row[2]
         previous_price = row[3]
-        discounted_price = row[4]
+        percent_discount = row[4]
+        discounted_price = previous_price - (previous_price * percent_discount //100)
         category = row[5]
         sub_category = row[6]
         dictionary = {

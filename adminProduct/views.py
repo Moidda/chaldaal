@@ -23,7 +23,7 @@ def edit_product(request, product_id):
     result = cursor.fetchall()
     if len(result):
         percent_off = result[0][0]
-        discounted_price = price_per_unit*(100-percent_off) // 100
+        discounted_price = price_per_unit - (price_per_unit * percent_off // 100)
 
     context = {
         'customer_id': request.session['customer_id'],
@@ -49,6 +49,6 @@ def save_changes(request, product_id):
     price_per_unit = int(str(request.POST.get('price_per_unit')))
     percent_off = int(str(request.POST.get('percent_off')))
 
-    # update percent_off with a procedure
+    cursor.callproc('CHECKING_FLASH_SALE', [product_id,percent_off])
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
