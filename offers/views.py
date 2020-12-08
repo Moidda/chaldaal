@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 from django.db import connection
 from django.http import JsonResponse
 from cart.views import cart
-from home.views import get_table
 
 
 home_page = 'http://127.0.0.1:8000/'
@@ -43,14 +42,52 @@ def create_flash_sale(request):
 
 def sale_list(request):
     if 'customer_id' not in request.session:
-        return redirect(log_in)
+        return redirect(home_page)
 
-    sql = "SELECT P.PRODUCT_ID,"
-    table = get_table(sql)
+    sql = '''SELECT F.SALE_ID,
+            P.PRODUCT_ID,
+            P.PRODUCT_NAME,
+            P.PRICE_PER_UNIT AS PREVIOUS_PRICE,
+            (P.PRICE_PER_UNIT - P.PRICE_PER_UNIT * F.PERCENT_DISCOUNT/100) AS DISCOUNTED_PRICE,
+            P.CATEGORY,
+            P.SUB_CATEGORY
+            FROM PRODUCT P,FLASH_SALE F
+            WHERE P.PRODUCT_ID = F.PRODUCT_ID'''
+
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    table = []
+    for row in result:
+        sale_id = row[0]
+        product_id = row[1]
+        product_name = row[2]
+        previous_price = row[3]
+        discounted_price = row[4]
+        category = row[5]
+        sub_category = row[6]
+        dictionary = {
+            'flash_sale_id':sale_id,
+            'flash_sale_product_id': product_id,
+            'flash_sale_product_name': product_name,
+            'flash_sale_previous_price': previous_price,
+            'flash_sale_discounted_price': discounted_price,
+            'flash_sale_category': category,
+            'flash_sale_sub_category': sub_category
+        }
+        table.append(dictionary)
+
     context = {
-        'product': table,
         'customer_id': request.session['customer_id'],
-        'cart_price': cart.total_cost
+        'cart_price': cart.total_cost,
+        'flash_sale': table
     }
 
-    return render(request, 'sale_list.html',context)
+    return render(request, 'sale_list.html', context)
+
+def end_sale(request,flash_sale_id):
+    sql = '''
+            DELETE FROM FLASH_SALE 
+            WHERE SALE_ID = %s    
+    '''
+    cursor.execute(sql, [flash_sale_id])
+    return redirect('http://127.0.0.1:8000/manage_offers/sale_list/')
