@@ -29,4 +29,5 @@ urlpatterns = [
     path('manage_offers/', include('offers.urls')),
     path('history/', include('customerHistory.urls')),
     path('adminProduct/', include('adminProduct.urls')),
+    path('bundle-offer/', include('bundleOffer.urls')),
 ]

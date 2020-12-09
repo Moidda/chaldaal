@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'offers',
     'customerHistory',
     'adminProduct',
+    'bundleOffer',
 ]
 
 MIDDLEWARE = [

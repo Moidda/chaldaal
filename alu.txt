@@ -1,4 +1,6 @@
 ---------------- Changes in SQL ---------------------
+GET_PRODUCT
+UPDATE_PRODUCT
 
 -----------------------------------------------------
 
@@ -8,22 +10,12 @@ Calculations of discounted price is done by following python expression:
     price_per_unit - (price_per_unit * percent_discount // 100)
 
 Short-comings:
-1) Manage Product ->
-   Admin jodi kono product insert korar shomoy vul tottho diye insert kore,
-   tahole shei vul thik korar upay nai kono
-    -> Product insert kore felar pore delete korar option nai
-    -> Product info (price per unit, name) edit korar option nai
-       (shudhu stock edit kora jay)
-
-2) Sidebar not sticky -> (unsolvable)
+1) Sidebar not sticky -> (unsolvable)
         Page scroll kore niche namanor pore reload deya hole sidebar non-sticky
         hoye jay
 
 3) Checkout pagea points redeem korle page auto-refresh hoye jay. Checkout forme
    kono info edit kora thakle refresh er fole shei data chole jay, notun kore input deya lage
-
-4) Creating a new sale on a product that already has an existing sale, might create problems
-   in the backend
 
 
 TODO:
@@ -33,6 +25,5 @@ TODO:
 	    similar to cart system. And then can create the bundle offer with the products
 	    selected, similar to the checkout system of a cart
 
-price_per_unit - (price_per_unit * percent_discount // 100)
 
 
