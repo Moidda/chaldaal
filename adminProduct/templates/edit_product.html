@@ -18,6 +18,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="mb-3">
+                    <label>Name <span class="text-muted">*</span> </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="" name="product_name" value="{{product_name}}" required/>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Product name is required.
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mb-3">
                     <label>Unit <span class="text-muted">*</span> </label>
                     <div class="input-group">
@@ -102,4 +113,28 @@
 
         });
     </script>
+
+    <script language="JavaScript">
+		var lookup = {
+			'Breakfast': ['Local', 'Energy Booster', 'Cereals', 'Jam and Spreads'],
+			'Fruit and Vegetable': ['Fruits', 'Vegetables'],
+			'Beverage': ['Tea', 'Coffee', 'Juice', 'Soft Drinks', 'Water', 'Powder Drinks'],
+			'Meat and Fish': ['Meat', 'Fresh Fish', 'Dried Fish'],
+			'Snacks': ['Noodles', 'Soups', 'Pasta', 'Chocolate', 'Local', 'Chips', 'Popcorn and nuts', 'Biscuits', 'Salad Dressing', 'Sauces'],
+			'Dairy': ['Milk', 'Butter and cream', 'Cheese', 'Powder Milk', 'Yogurt and sweet'],
+			'Frozen': ['Frozen', 'Canned'],
+			'Bakery': ['Cookies', 'Snacks', 'Breads', 'Dips and spreads', 'Honey', 'Cakes'],
+			'Baking Needs': ['Nut and dried fruit', 'Mixes', 'Ingredients', 'FLour'],
+			'Cooking': ['Rice', 'Color and flavours', 'Pickles', 'Oil', 'Ghee', 'Ready Mix', 'Salt and Sugar', 'Dal or lentil', 'Shemai'],
+			'Baby Food': ['Toddler Foods', 'Milk and Drinks'],
+			'Diabetic Food': ['Diabetic'],
+		};
+		$('#options').on('change', function() {
+			var selectValue = $(this).val();
+			$('#choices').empty();
+			for(i = 0; i < lookup[selectValue].length; i++) {
+				$('#choices').append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
+			}
+		});
+	</script>
 {% endblock %}

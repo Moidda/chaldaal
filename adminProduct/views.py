@@ -46,8 +46,8 @@ def save_changes(request, product_id):
     product_name = str(request.POST.get('product_name'))
     unit = str(request.POST.get('unit'))
     units_in_stock = str(request.POST.get('units_in_stock'))
-    price_per_unit = int(str(request.POST.get('price_per_unit')))
-    percent_off = int(str(request.POST.get('percent_off')))
+    price_per_unit = str(request.POST.get('price_per_unit'))
+    percent_off = str(request.POST.get('percent_off'))
 
     cursor.callproc('CHECKING_FLASH_SALE', [product_id,percent_off])
 
