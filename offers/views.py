@@ -19,31 +19,39 @@ def manage_offers(request):
             'cart_price': cart.total_cost
         }
         return render(request, 'manage_offers.html', context)
+    else:
+        return redirect(home_page)
 
 
 def create_flash_sale(request):
+    if 'customer_id' not in request.session or request.session['customer_id'] != 1:
+        return redirect(home_page)
+
     product_id = str(request.POST.get("products"))
     percent_off = str(request.POST.get("percent_off"))
     percent_off = int(percent_off)
-
     cursor.callproc('CHECKING_FLASH_SALE', [product_id, percent_off])
 
     return redirect("http://127.0.0.1:8000/manage_offers/")
 
 
 def sale_list(request):
-    if 'customer_id' not in request.session:
+    if 'customer_id' not in request.session or request.session['customer_id'] != 1:
         return redirect(home_page)
 
-    sql = '''SELECT F.SALE_ID,
-            P.PRODUCT_ID,
-            P.PRODUCT_NAME,
-            P.PRICE_PER_UNIT AS PREVIOUS_PRICE,
-            F.PERCENT_DISCOUNT,
-            P.CATEGORY,
-            P.SUB_CATEGORY
-            FROM PRODUCT P,FLASH_SALE F
-            WHERE P.PRODUCT_ID = F.PRODUCT_ID'''
+    sql = '''SELECT 
+                F.SALE_ID,
+                P.PRODUCT_ID,
+                P.PRODUCT_NAME,
+                P.PRICE_PER_UNIT AS PREVIOUS_PRICE,
+                F.PERCENT_DISCOUNT,
+                P.CATEGORY,
+                P.SUB_CATEGORY
+            FROM 
+                PRODUCT P,
+                FLASH_SALE F
+            WHERE 
+                P.PRODUCT_ID = F.PRODUCT_ID AND F.PERCENT_DISCOUNT > 0'''
 
     cursor.execute(sql)
     result = cursor.fetchall()
@@ -54,11 +62,11 @@ def sale_list(request):
         product_name = row[2]
         previous_price = row[3]
         percent_discount = row[4]
-        discounted_price = previous_price - (previous_price * percent_discount //100)
+        discounted_price = previous_price - (previous_price * percent_discount // 100)
         category = row[5]
         sub_category = row[6]
         dictionary = {
-            'flash_sale_id':sale_id,
+            'flash_sale_id': sale_id,
             'flash_sale_product_id': product_id,
             'flash_sale_product_name': product_name,
             'flash_sale_previous_price': previous_price,
@@ -77,7 +85,10 @@ def sale_list(request):
     return render(request, 'sale_list.html', context)
 
 
-def end_sale(request,flash_sale_id):
+def end_sale(request, flash_sale_id):
+    if 'customer_id' not in request.session or request.session['customer_id'] != 1:
+        return redirect(home_page)
+
     sql = '''
             DELETE FROM FLASH_SALE 
             WHERE SALE_ID = %s    

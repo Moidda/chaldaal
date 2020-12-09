@@ -35,9 +35,9 @@
                         <p class="card-text text-center">{{p.unit}}</p>
                         <p class="card-text text-center font-weight-bold">
                             {% if p.percent_discount > 0 %}
-                                <h6><strike>{{p.price_per_unit}}</strike> {{p.discounted_price}}</h6>
+                                <h6><strike>{{p.price_per_unit}}</strike> {{p.discounted_price}} BDT</h6>
                             {% elif p.percent_discount == 0 %}
-                                 <h6>{{p.price_per_unit}}</h6>
+                                 <h6>{{p.price_per_unit}} BDT</h6>
                             {% endif %}
                         </p>
                         <p>
@@ -71,7 +71,6 @@
 
 {% block custom_script %}
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
     {{ product|json_script:"product-data" }}
     <script language="JavaScript">
         var product = JSON.parse(document.getElementById('product-data').textContent);

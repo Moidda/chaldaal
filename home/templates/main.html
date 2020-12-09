@@ -49,9 +49,24 @@
             feather.replace()
         </script>
 
-<!--    block for placing custom scripts at the end of body tag-->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script language="JavaScript">
+            $(document).ready(function(){
+                req = $.ajax({
+                    url: "{% url 'flash-sale-count' %}",
+                    dataType: "json",
+                    data: {}
+                });
+                req.done(function(data){
+                    if(data.count)
+                        $('#sale-count').text('(' + data.count + ')');
+                    else
+                        $('#sale-count').text('');
+                });
+            });
+        </script>
+
         {% block custom_script %}
         {% endblock %}
-
     </body>
 </html>

@@ -1,20 +1,6 @@
- ----------Changes in DDL------------
-DROP TABLE CUSTOMER_PHONE;
-CREATE TABLE CUSTOMER_PHONE
-(
-    CUSTOMER_ID     INT						NOT NULL,
-    PHONE_NUMBER    VARCHAR(20)		NULL,
-	
-	CONSTRAINT CUSTOMER_PHONE_PK PRIMARY KEY (CUSTOMER_ID),
-	CONSTRAINT CUSTOMER_PHONE_FK FOREIGN KEY(CUSTOMER_ID) REFERENCES CUSTOMER(CUSTOMER_ID) ON DELETE CASCADE
-);
+---------------- Changes in SQL ---------------------
 
-
- ----------Changes in function------------
-GET_CUSTOMER.sql
-
- ----------Changes in procedure------------
-UPDATE_CUSTOMER_INFO.sql
+-----------------------------------------------------
 
 
 REMAINDER:

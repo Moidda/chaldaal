@@ -160,6 +160,10 @@
 
 		$('#choice1').on('change', function() {
 			var selectValue = $(this).val();
+			$('#choice2').empty();
+			$('#choice3').empty();
+
+			$('#choice2').append("<option value='' disabled selected>Sub-category</option>");
 			for(i = 0; i < lookup[selectValue].length; i++) {
 				$('#choice2').append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
 			}
@@ -188,10 +192,6 @@
 					alert("Something went wrong. Reload the page");
 				}
 			});
-		});
-
-		$('#choice3').on('change', function(){
-
 		});
 	</script>
 {% endblock %}

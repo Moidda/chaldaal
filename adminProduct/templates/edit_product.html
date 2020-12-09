@@ -19,13 +19,28 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label>Name <span class="text-muted">*</span> </label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="" name="product_name" value="{{product_name}}" required/>
-                        <div class="invalid-feedback" style="width: 100%;">
-                            Product name is required.
-                        </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Category *</label>
+                        <select id="category" name="category" class="form-control" required>
+                            <option id="Breakfast" value="Breakfast">Breakfast</option>
+                            <option id="Fruit and Vegetable" value="Fruit and Vegetable">Fruit and Vegetable</option>
+                            <option id="Beverage" value="Beverage">Beverage</option>
+                            <option id="Meat and Fish" value="Meat and Fish">Meat and Fish</option>
+                            <option id="Snacks" value="Snacks">Snacks</option>
+                            <option id="Dairy" value="Dairy">Dairy</option>
+                            <option id="Frozen" value="Frozen">Frozen</option>
+                            <option id="Bakery" value="Bakery">Bakery</option>
+                            <option id="Baking Needs" value="Baking Needs">Baking Needs</option>
+                            <option id="Cooking" value="Cooking">Cooking</option>
+                            <option id="Baby Food" value="Baby Food">Baby Food</option>
+                            <option id="Diabetic Food" value="Diabetic Food">Diabetic Food</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Sub-category *</label>
+                        <select id="sub_category" name="sub_category" class="form-control" required>
+                        </select>
                     </div>
                 </div>
 
@@ -66,8 +81,8 @@
                     <div class="col-md-4 mb-3">
                         <label>Sale</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="percent_off" name="percent_off" value="{{percent_off}}" />
-                            <button id="percent_off-button" type="button" class="btn btn-info">Set sale</button>
+                            <input type="number" class="form-control" id="percent_discount" name="percent_discount" value="{{percent_discount}}" />
+                            <button id="percent_discount-button" type="button" class="btn btn-info">Set sale</button>
                         </div>
                     </div>
                 </div>
@@ -103,10 +118,10 @@
                 $('#label-stock').text("Stock (Save changes)");
             });
 
-            $('#percent_off-button').on('click', function(){
-                var percent_off = parseInt($('#percent_off').val()) || 0;
+            $('#percent_discount-button').on('click', function(){
+                var percent_off = parseInt($('#percent_discount').val()) || 0;
                 var price = parseInt($('#price_per_unit').val()) || 0;
-                var discountedPrice = parseInt(price*(100-percent_off) / 100);
+                var discountedPrice = price - parseInt((price*percent_off) / 100);
                 $('#discounted_price').val(discountedPrice);
                 $('#label-discount').text("Discounted Price (Save changes)");
             });
@@ -129,11 +144,23 @@
 			'Baby Food': ['Toddler Foods', 'Milk and Drinks'],
 			'Diabetic Food': ['Diabetic'],
 		};
-		$('#options').on('change', function() {
+
+		$(document).ready(function(){
+            $('#{{category}}').attr("selected", "selected");
+            var category = $('#category').val();
+			$('#sub_category').empty();
+			console.log(category);
+		    for(i = 0; i < lookup[category].length; i++){
+		        console.log(lookup[category][i]);
+		        $('#sub_category').append("<option value='" + lookup[category][i] + "'>" + lookup[category][i] + "</option>");
+            }
+		});
+
+		$('#category').on('change', function() {
 			var selectValue = $(this).val();
-			$('#choices').empty();
+			$('#sub_category').empty();
 			for(i = 0; i < lookup[selectValue].length; i++) {
-				$('#choices').append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
+				$('#sub_category').append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
 			}
 		});
 	</script>

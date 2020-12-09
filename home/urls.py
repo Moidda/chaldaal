@@ -12,5 +12,5 @@ urlpatterns = [
     path('show_product_flash_sale/', views.show_product_flash_sale, name='show_product_flash_sale'),
     path('sub_category/<slug:sub_category>/', views.show_sub_category, name='show_sub_category'),
     path('ajax/get_subcategory_filter/', views.get_subcategory_filter, name='get_subcategory_filter'),
-    path('product_list/', views.product_list, name='product_list'),
+    path('ajax/flash-sale-count/', views.flash_sale_count, name='flash-sale-count'),
 ]

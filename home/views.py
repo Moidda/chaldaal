@@ -24,15 +24,12 @@ def get_table(sql):
         category = row[5]
         sub_category = row[6]
         rating_by_customer = int(round(row[7]))
-        sql = '''SELECT NVL(PERCENT_DISCOUNT,0) FROM FLASH_SALE WHERE PRODUCT_ID = %s      
-        '''
-        cursor.execute(sql, [product_id])
-        result = cursor.fetchall()
-        if len(result):
-            percent_discount = int(result[0][0])
-        else:
+        percent_discount = cursor.callfunc('GET_PRODUCT', str, [product_id, 'PERCENT_DISCOUNT'])
+        if not percent_discount:
             percent_discount = 0
-        discounted_price = price_per_unit - (price_per_unit * percent_discount//100)
+        percent_discount = int(percent_discount)
+        discounted_price = price_per_unit - (price_per_unit * percent_discount // 100)
+
         cart_count = 0
         if product_id in cart.products:
             cart_count = cart.products[product_id]
@@ -51,6 +48,7 @@ def get_table(sql):
         })
 
     return context
+
 
 def home(request):
     if 'customer_id' in request.session:
@@ -152,10 +150,6 @@ def get_subcategory_filter(request):
     return JsonResponse(data, safe=False)
 
 
-def product_list(request):
-    context = {}
-    return render(request, 'product_list.html', context)
-
 def get_sale_table(sql):
     cursor.execute(sql)
     result = cursor.fetchall()
@@ -190,21 +184,27 @@ def get_sale_table(sql):
 
     return context
 
+
 def show_product_flash_sale(request):
     if 'customer_id' not in request.session:
         return redirect(log_in)
     sql = '''
-            SELECT P.PRODUCT_ID,
-            P.PRODUCT_NAME,
-            P.UNIT,
-            P.UNITS_IN_STOCK,
-            P.PRICE_PER_UNIT,
-            P.CATEGORY,
-            P.SUB_CATEGORY,
-            P.RATING_BY_CUSTOMER,
-            F.PERCENT_DISCOUNT
-            FROM PRODUCT P,FLASH_SALE F
-            WHERE P.PRODUCT_ID = F.PRODUCT_ID
+            SELECT 
+                P.PRODUCT_ID,
+                P.PRODUCT_NAME,
+                P.UNIT,
+                P.UNITS_IN_STOCK,
+                P.PRICE_PER_UNIT,
+                P.CATEGORY,
+                P.SUB_CATEGORY,
+                P.RATING_BY_CUSTOMER,
+                F.PERCENT_DISCOUNT
+            FROM 
+                PRODUCT P,
+                FLASH_SALE F
+            WHERE 
+                P.PRODUCT_ID = F.PRODUCT_ID AND
+                F.PERCENT_DISCOUNT > 0
     '''
     table = get_sale_table(sql)
     table = [table[i: i + 3] for i in range(0, len(table), 3)]
@@ -214,3 +214,8 @@ def show_product_flash_sale(request):
         'cart_price': cart.total_cost
     }
     return render(request, 'product_list.html', context)
+
+
+def flash_sale_count(request):
+    count = (cursor.execute('SELECT COUNT(*) FROM FLASH_SALE WHERE PERCENT_DISCOUNT>0')).fetchall()[0][0]
+    return JsonResponse({'count': int(count)})
