@@ -1,0 +1,128 @@
+{% extends 'main.html' %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.checked {
+  color: orange;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+    {% for bundle_list in bundle_offer %}
+    <div class="row justify-content-center">
+        <div class="card-deck mb-3 text-center">
+            {% for b in bundle_list %}
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{b.bundle_name}}</h5>
+                        <p class="card-text text-center">&nbsp;</p>
+                        <p class="card-text text-center">{{p.cost}}</p>
+                        <p>
+                            <span id="{{p.product_id}}_1" class="fa fa-star"></span>
+                            <span id="{{p.product_id}}_2" class="fa fa-star"></span>
+                            <span id="{{p.product_id}}_3" class="fa fa-star"></span>
+                            <span id="{{p.product_id}}_4" class="fa fa-star"></span>
+                            <span id="{{p.product_id}}_5" class="fa fa-star"></span>
+                        </p>
+                        {% if p.units_in_stock %}
+                            <button id="product_id-{{p.product_id}}" type="button" class="btn btn-primary">
+                                Add in bag
+                                {% if p.cart_count %}
+                                    x{{p.cart_count}}
+                                {% endif %}
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-dark">Out of stock</button>
+                        {% endif %}
+                        {% if customer_id == 1 %}
+                            <a href="{% url 'edit_product' p.product_id %}" class="btn btn-info">Admin</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}
+
+{% block custom_script %}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    {{ product|json_script:"product-data" }}
+    <script language="JavaScript">
+        var product = JSON.parse(document.getElementById('product-data').textContent);
+        var categories = [];
+        for(i = 0; i < product.length; i++){
+            for(j = 0; j < product[i].length; j++){
+                categories.push(product[i][j].category);
+                var product_rating = product[i][j].rating_by_customer;
+                var product_id = product[i][j].product_id;
+                for(k = 1; k <= product_rating; k++){
+                    var id = product_id.toString() + "_" + k.toString();
+                    document.getElementById(id).classList.add("checked");
+                }
+            }
+        }
+        categories = new Set(categories);
+        categories = Array.from(categories);
+
+        $.ajax({
+            url: "{% url 'get_subcategory_filter' %}",
+            data: {
+                'categories': categories
+            },
+            datatype: 'json',
+            success: function(data) {
+                $('#filter').empty();
+                for(i = 0; i < data.length; i++){
+                    var sub_category = data[i];
+                    $('#filter').append("<option value='" + sub_category + "'>" + sub_category + "</option>");
+                }
+            },
+            error: function() {
+                alert("Something went wrong. Reload the page");
+            }
+        });
+    </script>
+
+    <script>
+        $('#filter-button').click(function(){
+            console.log("button clicked");
+            var subcat = $('#filter').val();
+            subcat = subcat.replace(/\s+/g, '-').toLowerCase();
+            window.location.href = "http://127.0.0.1:8000/sub_category/" + subcat + "/";
+        });
+    </script>
+
+    <script language="JavaScript">
+        $(document).ready(function(){
+
+            $('.btn-primary').on('click', function(){
+                var btnId = $(this).attr("id");
+                var arr = btnId.split('-');
+                var pid = arr[1];
+
+                req = $.ajax({
+                    url: "{% url 'add_item' %}",
+                    dataType: 'json',
+                    data: {
+                        'product_id': pid
+                    }
+                });
+                req.done(function(data){
+                    var txt = 'Add in bag';
+                    if(data.cart_count)
+                        txt = txt + ' x' + data.cart_count;
+                    $('#product_id-'+pid).text(txt);
+
+                    txt = '';
+                    if(data.cart_price) txt = '(' + data.cart_price + ') BDT';
+                    $('#cart-price').text(txt);
+                });
+            });
+
+        });
+    </script>
+{% endblock %}

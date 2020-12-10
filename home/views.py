@@ -219,3 +219,11 @@ def show_product_flash_sale(request):
 def flash_sale_count(request):
     count = (cursor.execute('SELECT COUNT(*) FROM FLASH_SALE WHERE PERCENT_DISCOUNT>0')).fetchall()[0][0]
     return JsonResponse({'count': int(count)})
+
+def show_bundle_offer(request):
+    context = {
+        'customer_id': request.session['customer_id'],
+        'cart_price': cart.total_cost
+    }
+
+    return render(request,'bundle-customer-end.html', context)
