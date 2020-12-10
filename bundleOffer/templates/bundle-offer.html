@@ -11,14 +11,22 @@
 {% block content %}
 	<div class="container h-50">
         <h4>Create a Bundle</h4>
+        <p></p>
+        <input type="text" class="form-control" id="bundle_name" name="bundle_name" placeholder="Bundle Name" required>
+        <p></p>
+        <input type="number" class="form-control" id="bundle_cost" name="bundle_cost" placeholder="Bundle Cost" required>
+        <p></p>
 
         <div class="product-list">
             <div class="d-flex justify-content-center h-100 p-list">
-
             </div>
         </div>
 
-        <button type="button" class="btn btn-success btn-sm p-add">
+        <p></p>
+        <a class="btn btn-secondary" href="{% url 'bundle-list' %}">
+            Existing Bundle?
+        </a>
+        <button type="button" class="btn btn-success p-add">
             <span data-feather="plus"></span>
             Add Item
         </button>
@@ -33,6 +41,7 @@
     {% load static %}
     <script src="{% static 'bundle-offer.js' %}"></script>
     <script src="{% static 'bundle-dropdowns.js' %}"></script>
+    <script src="{% static 'bundle-create.js' %}"></script>
 {% endblock %}
 
 

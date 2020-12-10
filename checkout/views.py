@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db import connection
 from django.shortcuts import redirect
 from . import models
@@ -121,10 +121,19 @@ def confirm_checkout(request):
 # - recalculates the total cost of cart accordingly
 # - reloads the check out form page
 def using_points(request):
-    point = str(request.POST.get('using_points'))
+    point = request.GET.get('redeemed_point')
     point = int(point)
 
     if 0 <= point <= creditSystem.total_credits and point*creditSystem.per_credit_discount <= cart.total_cost:
         creditSystem.redeemed_credits = point
 
-    return redirect("http://127.0.0.1:8000/checkout/")
+    print("----------------------------------------------------------------------------------------------")
+    print("point = " + str(point))
+    print("----------------------------------------------------------------------------------------------")
+
+    data = {
+        'credits_remaining': creditSystem.total_credits - creditSystem.redeemed_credits,
+        'per_credits_discount': creditSystem.per_credit_discount,
+        'cart_cost': cart.total_cost
+    }
+    return JsonResponse(data)

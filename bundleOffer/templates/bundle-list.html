@@ -1,0 +1,60 @@
+{% extends 'main.html' %}
+
+<!------------------------------------ CONTEXT
+KEY-'bundle', value-L
+L is a list
+Each item of list is a dictionary D
+Dictionary D ->
+    key->'bundle_id', value->bundle id
+    key->'bundle_name', value->bundle name
+    key->'bundle_cost', value->bundle cost
+
+Sample:
+def bundle_list(request):
+    extra codes ...
+
+    D1 = {
+        'bundle_id': 5
+        'bundle_name': 'Radhuni Kitchen Mix',
+        'bundle_cost': 345
+    }
+    D2 = {
+        'bundle_id': 1
+        'bundle_name': 'Dan Cake Vanilla Free Danish Condensed Milk',
+        'bundle_cost': 200
+    }
+    extra codes ...
+
+    bundle = [D1, D2]
+    context['bundle'] = bundle
+
+    extra codes ...
+
+    return render(request, 'bundle-list.html', context)
+------------------------------------------------------------------------------------->
+
+{% block content %}
+    <p><h4>Bundle Offers</h4></p>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>End Offer</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in bundle %}
+                    <tr>
+                        <td>{{b.bundle_name}}</td>
+                        <td>{{b.bundle_cost}}</td>
+                        <td>
+                            <a href="{% url 'bundle-end' b.bundle_id %}" class="btn btn-outline-dark">x</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -26,25 +26,25 @@
                 <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="text-success">
                         <h6 class="my-0">Credit discount</h6>
-                        <small>You have {{points}} credit points</small>
+                        <small id="credits_remaining">You have {{points}} credit points</small>
                     </div>
-                    <span class="text-success">- {{credit_discount}}</span>
+                    <span id="credits_discount" class="text-success">- {{credit_discount}}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                     <span><strong>Total (BDT)</strong></span>
-                    <strong>{{total_cost}}</strong>
+                    <strong id="total_cost">{{total_cost}}</strong>
                 </li>
             </ul>
-            <form class="card p-2" method = "post" action = "using_points/">
-                {% csrf_token %}
-                <div class="input-group">
-                    <input type="text" name="using_points" class="form-control" placeholder="Use your points here">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">Redeem</button>
-                    </div>
+
+            <div class="input-group">
+                <input type="number" name="using_points" class="form-control" placeholder="Use your points here">
+                <div class="input-group-append">
+                    <button id="redeem-button" type="button" class="btn btn-secondary">Redeem</button>
                 </div>
-            </form>
+            </div>
+
         </div>
+
         <!--            form -->
         <!--            action="{% url 'confirm_checkout' %}"-->
         <div class="col-md-8 order-md-1">
@@ -159,9 +159,11 @@
             </form>
         </div>
     </div>
+    <p></p>
 {% endblock %}
 
 {% block custom_script %}
     {% load static %}
     <script language="JavaScript" src="{% static 'js/form-validation.js' %}"> </script>
+    <script language="JavaScript" src="{% static 'js/redeem-points.js' %}"> </script>
 {% endblock %}

@@ -116,6 +116,7 @@ def show_product_search(request, searched_item):
 
     if searched_item == 'none':
         searched_item = ''
+    searched_item = searched_item.replace('-', ' ')
     sql = "SELECT * FROM PRODUCT WHERE LOWER(PRODUCT_NAME) LIKE '%%%s%%' ORDER BY PRODUCT_ID" % searched_item
     table = get_table(sql)
     table = [table[i: i+3] for i in range(0, len(table), 3)]
@@ -129,12 +130,14 @@ def show_product_search(request, searched_item):
 
 # is called from the search-form in navbar html
 def searched(request):
-    if 'customer_id' in request.session:
-        searched_item = str(request.POST.get('searched'))
-        searched_item = searched_item.lower()
-        if not searched_item:
-            searched_item = 'none'
-        return redirect('http://127.0.0.1:8000/show_product_search/' + searched_item + '/')
+    if 'customer_id' not in request.session:
+        return redirect(home_page)
+    searched_item = str(request.POST.get('searched'))
+    searched_item = searched_item.lower()
+    if not searched_item:
+        searched_item = 'none'
+    searched_item = searched_item.replace(' ', '-')
+    return redirect('http://127.0.0.1:8000/show_product_search/' + searched_item + '/')
 
 
 def get_subcategory_filter(request):
