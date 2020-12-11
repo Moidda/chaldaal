@@ -21,7 +21,6 @@ def add_item(request):
     units_in_stock = (cursor.execute('SELECT UNITS_IN_STOCK FROM PRODUCT WHERE PRODUCT_ID = %s', [product_id]).fetchall())[0][0]
     if units_in_stock:
         cart.add_product(product_id)
-    print("db updated. cart updated")
     data = {
         'cart_count': cart.products[product_id],
         'cart_price': cart.total_cost
@@ -72,7 +71,7 @@ def index(request):
         result = cursor.fetchone()
         product_name = result[1]
         unit = result[2]
-        price_per_unit = result[4]
+        price_per_unit = connection.cursor().callfunc('GET_PRODUCT_PRICE', int, [product_id])
         category = result[5]
         sub_category = result[6]
         rating_by_customer = result[7]
