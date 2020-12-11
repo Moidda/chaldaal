@@ -115,6 +115,10 @@
 							</select>
 						</div>
 
+						<div class="input-group mb-2">
+                            <input type="text" name="current_stock" placeholder="Current Stock: " class="form-control" readonly>
+						</div>
+
                         <div class="input-group mb-2">
                             <div class="input-group-append">
                             </div>
@@ -162,6 +166,12 @@
 
 		$('#choice1').on('change', function() {
 			var selectValue = $(this).val();
+			$('#choice2').empty();
+			$('#choice2').append('<option value="" disabled selected>Sub-category</option>');
+
+			$('#choice3').empty();
+			$('#choice3').append('<option value="" disabled selected>Product</option>');
+
 			for(i = 0; i < lookup[selectValue].length; i++) {
 				$('#choice2').append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
 			}
@@ -171,6 +181,7 @@
 			var category = $('#choice1').val();
 			var subcategory = $(this).val();
 			$('#choice3').empty();
+			$('#choice3').append('<option value="" disabled selected>Product</option>');
 
 			$.ajax({
 				url: "{% url 'get_products' %}",
@@ -193,7 +204,17 @@
 		});
 
 		$('#choice3').on('change', function(){
-
+			var pid = $(this).val();
+			req = $.ajax({
+				url: "{% url 'get_stock' %}",
+				dataType: "json",
+				data: {
+					'product_id': pid
+				}
+			});
+			req.done(function(data){
+				$('input[name="current_stock"]').attr("placeholder", "Current Stock: " + data.stock);
+			});
 		});
 	</script>
 {% endblock %}

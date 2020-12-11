@@ -49,6 +49,8 @@ def insert_product(request):
 
 
 def stock(request):
+    if 'customer_id' not in request.session or request.session['customer_id'] != 1:
+        return redirect(home_page)
     context = {
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
@@ -63,8 +65,10 @@ def change_stock(request):
     product_id = str(request.POST.get("products"))
     change_in_stock = str(request.POST.get("change_in_stock"))
     change_in_stock = int(change_in_stock)
-    sql = 'UPDATE PRODUCT SET UNITS_IN_STOCK = UNITS_IN_STOCK + %s WHERE PRODUCT_ID = %s'
-    cursor.execute(sql, [change_in_stock, product_id])
+    current_stock = int(cursor.callfunc('GET_PRODUCT', str, [product_id, 'UNITS_IN_STOCK']))
+    new_stock = max(current_stock + change_in_stock, 0)
+    sql = 'UPDATE PRODUCT SET UNITS_IN_STOCK = %s WHERE PRODUCT_ID = %s'
+    cursor.execute(sql, [new_stock, product_id])
 
     return redirect("http://127.0.0.1:8000/manage_product/stock/")
 
@@ -82,4 +86,12 @@ def get_products(request):
             'product_name': row[1]
         })
     return JsonResponse(data, safe=False)
+
+
+def get_stock(request):
+    product_id = request.GET.get('product_id')
+    data = {
+        'stock': cursor.callfunc('GET_PRODUCT', str, [product_id, 'UNITS_IN_STOCK'])
+    }
+    return JsonResponse(data)
 
