@@ -27,6 +27,17 @@ def history(request, isCustomer):
         if len(temp) == 0:
             continue
         customer_name = temp[0][0]
+        cursor.execute('''
+                        SELECT 
+                            C.EMAIL 
+                        FROM 
+                            CUSTOMER C, ORDAR O 
+                        WHERE
+                            O.ORDAR_NO = %s AND
+                            O.CUSTOMER_ID = C.CUSTOMER_ID 
+                        ''', [ordar_no])
+        result = cursor.fetchall()
+        email = result[0][0]
 
         cursor.execute('SELECT STREET_NO FROM ORDER_INFO WHERE ORDAR_NO=%s', [ordar_no])
         street_no = (cursor.fetchall())[0][0]
@@ -87,6 +98,7 @@ def history(request, isCustomer):
                 payment_no = temp[0][0]
 
         history_data.append({
+            'email': email,
             'customer_name': customer_name,
             'street_no': street_no,
             'house_no': house_no,
