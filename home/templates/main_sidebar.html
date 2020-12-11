@@ -1,4 +1,4 @@
-<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+<nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
             <li><p></p></li>
@@ -52,12 +52,12 @@
                     Flash Sale <b id="sale-count"></b>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'show_bundle_offer' %}">
-                <span data-feather="gift"></span>
-                Bundle offer
-                </a>
-            </li>
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" href="{% url 'show_bundle_offer' %}">-->
+<!--                <span data-feather="gift"></span>-->
+<!--                Bundle offer-->
+<!--                </a>-->
+<!--            </li>-->
         </ul>
 
         {% if customer_id == 1 %}
@@ -77,12 +77,12 @@
                     Manage Sale
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="http://127.0.0.1:8000/bundle-offer/">
-                    <span data-feather="archive"></span>
-                    Manage Bundle
-                    </a>
-                </li>
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="http://127.0.0.1:8000/bundle-offer/">-->
+<!--                    <span data-feather="archive"></span>-->
+<!--                    Manage Bundle-->
+<!--                    </a>-->
+<!--                </li>-->
             </ul>
         {% endif %}
     </div>

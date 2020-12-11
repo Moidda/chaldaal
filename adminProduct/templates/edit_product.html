@@ -87,15 +87,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label>Add in current Bundle</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="bundle_amount" name="bundle_amount" placeholder="Amount"/>
-                            <button type="button" class="btn btn-info">Add</button>
-                        </div>
-                    </div>
-                </div>
+
                 <hr class="mb-4">
                 <button class="btn btn-primary btn-lg btn-block" id="submit_btn" type="submit">Save changes</button>
             </form>
@@ -148,14 +140,18 @@
 		};
 
 		$(document).ready(function(){
-            $('#{{category}}').attr("selected", "selected");
+		    console.log('{{category}}');
+		    console.log('{{sub_category}}');
+
+            $('#category').val('{{category}}');
             var category = $('#category').val();
+
 			$('#sub_category').empty();
-			console.log(category);
 		    for(i = 0; i < lookup[category].length; i++){
-		        console.log(lookup[category][i]);
 		        $('#sub_category').append("<option value='" + lookup[category][i] + "'>" + lookup[category][i] + "</option>");
             }
+
+            $('#sub_category').val('{{sub_category}}');
 		});
 
 		$('#category').on('change', function() {
