@@ -12,15 +12,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'popular' %}">
-                <span data-feather="star"></span>
-                Our Popular Products
-                </a>
-            </li>
-            <li class="nav-item">
-                {% include 'category_dropdown.html' %}
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="http://127.0.0.1:8000/cart/">
                 <span data-feather="shopping-cart"></span>
                     Cart
@@ -30,6 +21,15 @@
                         {% endif %}
                     </b>
                 </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'popular' %}">
+                <span data-feather="star"></span>
+                Our Popular Products
+                </a>
+            </li>
+            <li class="nav-item">
+                {% include 'category_dropdown.html' %}
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'history' 1 %}">
