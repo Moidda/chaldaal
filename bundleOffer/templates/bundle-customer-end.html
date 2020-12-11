@@ -1,1 +1,125 @@
 {% extends 'main.html' %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.checked {
+  color: orange;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+    <p>
+    </p>
+
+    {% for plist in product %}
+    <div class="row justify-content-center">
+        <div class="card-deck mb-3 text-center">
+            {% for p in plist %}
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body text-center">
+                        <h3 class="card-title">{{p.product_name}}</h3>
+                        <h6>product_name 100gm x3 </h6>
+                        <h6>product_name 100gm x3</h6>
+                        <h6>product_name 100gm x3</h6>
+
+                        <p class="card-text text-center">&nbsp;</p>
+                        <p class="card-text text-center font-weight-bold">
+                                 <h6>PPU BDT</h6>
+                        </p>
+                        <button id="product_id-{{p.product_id}}" type="button" class="btn btn-primary">
+                            Add in bag
+                            x2
+                        </button>
+                        {% if customer_id == 1 %}
+                            <a href="#" class="btn btn-info">Admin</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
+
+
+<!--{% block custom_script %}-->
+<!--    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>-->
+<!--    {{ product|json_script:"product-data" }}-->
+<!--    <script language="JavaScript">-->
+<!--        var product = JSON.parse(document.getElementById('product-data').textContent);-->
+<!--        var categories = [];-->
+<!--        for(i = 0; i < product.length; i++){-->
+<!--            for(j = 0; j < product[i].length; j++){-->
+<!--                categories.push(product[i][j].category);-->
+<!--                var product_rating = product[i][j].rating_by_customer;-->
+<!--                var product_id = product[i][j].product_id;-->
+<!--                for(k = 1; k <= product_rating; k++){-->
+<!--                    var id = product_id.toString() + "_" + k.toString();-->
+<!--                    document.getElementById(id).classList.add("checked");-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+<!--        categories = new Set(categories);-->
+<!--        categories = Array.from(categories);-->
+
+<!--        $.ajax({-->
+<!--            url: "{% url 'get_subcategory_filter' %}",-->
+<!--            data: {-->
+<!--                'categories': categories-->
+<!--            },-->
+<!--            datatype: 'json',-->
+<!--            success: function(data) {-->
+<!--                $('#filter').empty();-->
+<!--                for(i = 0; i < data.length; i++){-->
+<!--                    var sub_category = data[i];-->
+<!--                    $('#filter').append("<option value='" + sub_category + "'>" + sub_category + "</option>");-->
+<!--                }-->
+<!--            },-->
+<!--            error: function() {-->
+<!--                alert("Something went wrong. Reload the page");-->
+<!--            }-->
+<!--        });-->
+<!--    </script>-->
+
+<!--    <script>-->
+<!--        $('#filter-button').click(function(){-->
+<!--            console.log("button clicked");-->
+<!--            var subcat = $('#filter').val();-->
+<!--            subcat = subcat.replace(/\s+/g, '-').toLowerCase();-->
+<!--            window.location.href = "http://127.0.0.1:8000/sub_category/" + subcat + "/";-->
+<!--        });-->
+<!--    </script>-->
+
+<!--    <script language="JavaScript">-->
+<!--        $(document).ready(function(){-->
+
+<!--            $('.btn-primary').on('click', function(){-->
+<!--                var btnId = $(this).attr("id");-->
+<!--                var arr = btnId.split('-');-->
+<!--                var pid = arr[1];-->
+
+<!--                req = $.ajax({-->
+<!--                    url: "{% url 'add_item' %}",-->
+<!--                    dataType: 'json',-->
+<!--                    data: {-->
+<!--                        'product_id': pid-->
+<!--                    }-->
+<!--                });-->
+<!--                req.done(function(data){-->
+<!--                    var txt = 'Add in bag';-->
+<!--                    if(data.cart_count)-->
+<!--                        txt = txt + ' x' + data.cart_count;-->
+<!--                    $('#product_id-'+pid).text(txt);-->
+
+<!--                    txt = '';-->
+<!--                    if(data.cart_price) txt = '(' + data.cart_price + ') BDT';-->
+<!--                    $('#cart-price').text(txt);-->
+<!--                });-->
+<!--            });-->
+
+<!--        });-->
+<!--    </script>-->
+<!--{% endblock %}-->

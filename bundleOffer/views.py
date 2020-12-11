@@ -27,8 +27,7 @@ def create_bundle_offer(request):
     total_cost = int(request.GET.get('bundle_cost'))
     product = request.GET.getlist('product_list[]', None)
 
-
-    sql = 'SELECT NVL(MAX(BUNDLE_ID),0) FROM BUNDLE_OFFER'
+    sql = 'SELECT NVL(MAX(PRODUCT_ID),0) FROM PRODUCT'
     cursor.execute(sql)
     result = cursor.fetchall()
     bundle_id = int(result[0][0]) + 1

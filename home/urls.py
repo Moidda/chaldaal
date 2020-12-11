@@ -14,4 +14,5 @@ urlpatterns = [
     path('sub_category/<slug:sub_category>/', views.show_sub_category, name='show_sub_category'),
     path('ajax/get_subcategory_filter/', views.get_subcategory_filter, name='get_subcategory_filter'),
     path('ajax/flash-sale-count/', views.flash_sale_count, name='flash-sale-count'),
+    path('covid_19_protection/', views.covid, name='covid'),
 ]

@@ -229,5 +229,18 @@ def show_bundle_offer(request):
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
     }
-
     return render(request, 'bundle-customer-end.html', context)
+
+def covid(request):
+    if 'customer_id' not in request.session:
+        return redirect(home_page)
+
+    sql = "SELECT * FROM PRODUCT WHERE CATEGORY = 'Covid-19 Protection'"
+    table = get_table(sql)
+    table = [table[i: i + 3] for i in range(0, len(table), 3)]
+    context = {
+        'product': table,
+        'customer_id': request.session['customer_id'],
+        'cart_price': cart.total_cost
+    }
+    return render(request, 'product_list.html', context)
