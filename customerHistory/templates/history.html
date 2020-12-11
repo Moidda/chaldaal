@@ -10,6 +10,12 @@
         <h3>Your Order History</h3>
     {% elif not isCustomer %}
         <h3>Customer Transactions</h3>
+        <div class="input-group">
+            <div class="col-xs-4">
+                <input type="email" id="email" class="form-control" placeholder="Email ..." minlength="1">
+            </div>
+            <button type="button" id="filter" class="btn btn-info">Filter</button>
+        </div>
     {% endif %}
 
     {% for data in history_data %}
@@ -102,4 +108,19 @@
 
 
 {% block custom_script %}
+    <script>
+        $(document).ready(function(){
+
+            $('#filter').on('click', function(){
+                var email = $('#email').val();
+                if(email == ''){
+                    alert("Field is empty");
+                    return;
+                }
+                email = email.replace(/\s+/g, '-')
+                window.location.href = "http://127.0.0.1:8000/history/0/" + email + "/";
+            });
+
+        });
+    </script>
 {% endblock %}

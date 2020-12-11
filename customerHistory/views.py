@@ -8,13 +8,21 @@ home_page = 'http://127.0.0.1:8000/'
 cursor = connection.cursor()
 
 
-def history(request, isCustomer):
+def history(request, isCustomer, slug=''):
     if 'customer_id' not in request.session:
         return redirect(home_page)
 
     history_data = []
     if isCustomer:
         cursor.execute('SELECT ORDAR_NO FROM ORDAR WHERE CUSTOMER_ID = %s ORDER BY ORDAR_NO DESC', [request.session['customer_id']])
+    elif slug != '':
+        sql = 'SELECT CUSTOMER_ID FROM CUSTOMER WHERE EMAIL = %s'
+        cursor.execute(sql, [slug])
+        temp = cursor.fetchall()
+        if not len(temp):
+            return render(request, 'not_found.html', {'customer_id': request.session['customer_id'], 'cart_price': cart.total_cost})
+        cid = temp[0][0]
+        cursor.execute('SELECT ORDAR_NO FROM ORDAR WHERE CUSTOMER_ID = %s ORDER BY ORDAR_NO DESC', [cid])
     else:
         cursor.execute('SELECT ORDAR_NO FROM ORDAR ORDER BY ORDAR_NO DESC')
 

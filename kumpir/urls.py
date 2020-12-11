@@ -7,5 +7,5 @@ urlpatterns = [
     path('stock/', views.stock),
     path('stock/change_stock/', views.change_stock, name='change_stock'),
     path('stock/ajax/get_products/', views.get_products, name='get_products'),
-    path('/ajax/get_stock/', views.get_stock, name='get_stock'),
+    path('ajax/get_stock/', views.get_stock, name='get_stock'),
 ]
