@@ -125,6 +125,8 @@ def show_product_search(request, searched_item):
         'customer_id': request.session['customer_id'],
         'cart_price': cart.total_cost
     }
+    if len(table) == 0:
+        return render(request, 'not_found.html', context)
     return render(request, 'product_list.html', context)
 
 
