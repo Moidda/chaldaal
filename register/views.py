@@ -77,3 +77,7 @@ def log_out(request):
     request.session.flush()
     cart.clear_cart()
     return redirect('http://127.0.0.1:8000/log_in/')
+
+
+def welcome(request):
+    return render(request, 'welcome.html')

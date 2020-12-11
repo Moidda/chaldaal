@@ -6,6 +6,7 @@ from cart.views import cart
 from django.http import JsonResponse
 
 
+welcome = 'http://127.0.0.1:8000/welcome/'
 home_page = 'http://127.0.0.1:8000'
 log_in = 'http://127.0.0.1:8000/log_in'
 cursor = connection.cursor()
@@ -58,7 +59,7 @@ def home(request):
         }
         return render(request, 'Homepage.html', context)
     else:
-        return redirect(log_in)
+        return redirect(welcome)
 
 
 def popular(request):
