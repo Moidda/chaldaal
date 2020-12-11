@@ -9,7 +9,8 @@ Calculations of discounted price is done by following python expression:
     price_per_unit - (price_per_unit * percent_discount // 100)
 
 Short-comings:
-
+1) Change stock -> -ve stock
+2) Search cannot recognize hyphen
 3) Checkout pagea points redeem korle page auto-refresh hoye jay. Checkout forme
    kono info edit kora thakle refresh er fole shei data chole jay, notun kore input deya lage
 
