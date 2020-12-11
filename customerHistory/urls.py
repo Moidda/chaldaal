@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.history, name='history'),
+    path('<int:isCustomer>/', views.history, name='history'),
 ]

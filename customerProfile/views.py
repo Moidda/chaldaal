@@ -73,3 +73,27 @@ def save_changes(request):
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+def customer_list(request):
+    if 'customer_id' not in request.session or request.session['customer_id'] != 1:
+        return redirect(home_page)
+
+    clist = []
+    result = (cursor.execute('SELECT * FROM CUSTOMER')).fetchall()
+    for r in result:
+        clist.append({
+            'customer_name': r[1],
+            'street_no': r[2],
+            'house_no': r[3],
+            'apt_no': r[4],
+            'email': r[5],
+            'credit_card': cursor.callfunc('GET_CREDIT_CARD', str, [r[0], 'CARD_NO']),
+            'bkash': cursor.callfunc('GET_BKASH', str, [r[0], 'PHONE_NO'])
+        })
+
+    context = {
+        'customer_id': request.session['customer_id'],
+        'cart_price': cart.total_cost,
+        'customer_list': clist
+    }
+    return render(request, 'customer-list.html', context)

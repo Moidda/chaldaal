@@ -32,7 +32,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'history' %}">
+                <a class="nav-link" href="{% url 'history' 1 %}">
                 <span data-feather="shopping-bag"></span>
                 Order History
                 </a>
@@ -80,12 +80,18 @@
                     Manage Sale
                     </a>
                 </li>
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="http://127.0.0.1:8000/bundle-offer/">-->
-<!--                    <span data-feather="archive"></span>-->
-<!--                    Manage Bundle-->
-<!--                    </a>-->
-<!--                </li>-->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'history' 0 %}">
+                    <span data-feather="activity"></span>
+                    Transactions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'customer-list' %}">
+                    <span data-feather="users"></span>
+                    Customers
+                    </a>
+                </li>
             </ul>
         {% endif %}
     </div>

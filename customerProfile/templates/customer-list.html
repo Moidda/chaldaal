@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+
+        <h3>Customers</h3>
+
+        <div class="row">
+            <div class="col-sm">
+                {% for c in customer_list %}
+                    <hr>
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                        <h6>{{c.email}}</h6>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div><h6 class="my-0">Name:</h6></div>
+                                <span class="text-muted">{{c.customer_name}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div><h6 class="my-0">Street No:</h6></div>
+                                <span class="text-muted">{{c.street_no}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div><h6 class="my-0">House No:</h6></div>
+                                <span class="text-muted">{{c.house_no}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div><h6 class="my-0">Apt No:</h6></div>
+                                <span class="text-muted">{{c.apt_no}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div><h6 class="my-0">Credit Card No: </h6></div>
+                                <span class="text-muted">{{c.credit_card}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div><h6 class="my-0">Bkash Phone No: </h6></div>
+                                <span class="text-muted">{{c.bkash}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        &nbsp;
+{% endblock %}
