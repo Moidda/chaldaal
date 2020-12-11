@@ -6,7 +6,11 @@
 
 {% block content %}
 
-    <h3>Your Order History</h3>
+    {% if isCustomer %}
+        <h3>Your Order History</h3>
+    {% elif not isCustomer %}
+        <h3>Customer Transactions</h3>
+    {% endif %}
 
     {% for data in history_data %}
         <hr>

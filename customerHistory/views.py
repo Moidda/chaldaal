@@ -12,11 +12,6 @@ def history(request, isCustomer):
     if 'customer_id' not in request.session:
         return redirect(home_page)
 
-    # print("-----------------------------------------------------------------------------------------------------")
-    # print("user = " + str(slug))
-    # print(type(slug))
-    # print("-----------------------------------------------------------------------------------------------------")
-
     history_data = []
     if isCustomer:
         cursor.execute('SELECT ORDAR_NO FROM ORDAR WHERE CUSTOMER_ID = %s ORDER BY ORDAR_NO DESC', [request.session['customer_id']])
@@ -109,6 +104,7 @@ def history(request, isCustomer):
     context = {
         'cart_price': cart.total_cost,
         'customer_id': request.session['customer_id'],
-        'history_data': history_data
+        'history_data': history_data,
+        'isCustomer': isCustomer
     }
     return render(request, 'history.html', context)
