@@ -34,7 +34,7 @@ def history(request):
 
         sql = '''
             SELECT 
-                P.PRODUCT_NAME, P.UNIT, P.PRICE_PER_UNIT, PIO.QUANTITY
+                P.PRODUCT_ID, P.PRODUCT_NAME, P.UNIT, P.PRICE_PER_UNIT, PIO.QUANTITY
             FROM
                 PRODUCT P, PRODUCTS_IN_ORDER PIO
             WHERE 
@@ -46,12 +46,18 @@ def history(request):
         temp = cursor.fetchall()
         product_list = []
         for r in temp:
+            pid = r[0]
+            name = r[1]
+            unit = r[2]
+            ppu = connection.cursor().callfunc('GET_PRODUCT_PRICE', int, [pid])
+            quantity = r[4]
+            to_pay = quantity*ppu
             product_list.append({
-                'name': r[0],
-                'unit': r[1],
-                'price_per_unit': r[2],
-                'quantity': r[3],
-                'to_pay': int(r[2]*r[3])
+                'name': name,
+                'unit': unit,
+                'price_per_unit': ppu,
+                'quantity': quantity,
+                'to_pay': to_pay
             })
 
         cursor.execute('SELECT CREDITS_REDEEMED FROM ORDER_INFO WHERE ORDAR_NO = %s', [ordar_no])
@@ -86,7 +92,8 @@ def history(request):
             'credits_discount': credits_discount,
             'total': total,
             'payment_method': payment_method,
-            'payment_no': payment_no
+            'payment_no': payment_no,
+            'payment_id': ordar_no
         })
 
     context = {

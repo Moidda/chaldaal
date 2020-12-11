@@ -1,6 +1,5 @@
 ---------------- Changes in SQL ---------------------
-GET_PRODUCT
-UPDATE_PRODUCT
+GET_PRODUCT_PRICE
 
 -----------------------------------------------------
 
@@ -10,9 +9,6 @@ Calculations of discounted price is done by following python expression:
     price_per_unit - (price_per_unit * percent_discount // 100)
 
 Short-comings:
-1) Sidebar not sticky -> (unsolvable)
-        Page scroll kore niche namanor pore reload deya hole sidebar non-sticky
-        hoye jay
 
 3) Checkout pagea points redeem korle page auto-refresh hoye jay. Checkout forme
    kono info edit kora thakle refresh er fole shei data chole jay, notun kore input deya lage

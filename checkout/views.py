@@ -45,7 +45,7 @@ def checkout(request):
         cursor.execute(sql, [pid])
         result = cursor.fetchone()
         product_name = result[0]
-        price_per_unit = result[1]
+        price_per_unit = connection.cursor().callfunc('GET_PRODUCT_PRICE', int, [pid])
         unit = result[2]
         context['cart_products'].append({
             'product_name': product_name,
