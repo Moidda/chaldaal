@@ -84,8 +84,9 @@ with what we will be working with. This experimental project turned out to be th
   
   Possible Solution:
     
-      Instead of making 'CATEGORY' an attribute of 'PRODUCT' entity, 'CATEGORY' could itself be an entity, which will contain the attributes
-      'CATEGORY_NAME', 'SUBCATEGORY_NAME', 'PRODUCT_ID'. None of the columns of CATEGORY table is necessarily unique.
+      Instead of making 'CATEGORY' an attribute of 'PRODUCT' entity, 'CATEGORY' could itself be an entity, 
+      which will contain the attributes 'CATEGORY_NAME', 'SUBCATEGORY_NAME', 'PRODUCT_ID'. None of the 
+      columns of CATEGORY table is necessarily unique.
       
              PRODUCT                               CATEGORY
       | PRODUCT_ID | ... |          | PRODUCT_ID | CATEGORY | SUB_CATEGORY |
