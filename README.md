@@ -66,12 +66,21 @@ with what I will be working with. This experimental project turned out to be the
 ##### Organizing project directory
 - The templates and static directories are not in sync with how django works
 - Using same code in more than one html in <script> tag. **Should've used seperate js and css files** for each django app and made life easier
+  
 ##### **NOT** mixing different stylesheets taken from different templates and messing things up
+
 ##### Subcategory feature is redundant:
-  The idea behind introducin a sub-category under each category for products was that a product can fall under multiple categories. In that case,
-  the product will have a different sub-category under those categories. For example:
-    **Snacks** and **Diabetic Food** are two categories. The product **Sugar Free Cookies** falls under both **Snacks** and **Diabetic Food**.
-    Under **Snacks**, **Sugar Free Cookies** might have a subcategory of *Cookies* and under **Diabetic Food** it might have a subcategory *Sugar Free Items*.
+  
+  The idea behind introducing a sub-category under each category for products was that a product can fall under multiple categories. In that case,
+  the product will have a different sub-category under those categories. 
+  
+  For example:
+
+    SNACKS and DIABETIC FOOD are two categories. 
+    The product SUGAR FREE COOKIES falls under both SNACKS and DIABETIC FOOD.
+    Under SNACKS, SUGAR FREE COOKIES might have a subcategory of "Cookies" and 
+    under DIABETIC FOOD it might have a subcategory "Sugar Free Items"
+    
   *In short, a product can fall under multiple cateogories. But in our implementation, a product can belong under only a single category, which is definitely
   not desirable*
   
