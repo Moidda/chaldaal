@@ -67,3 +67,14 @@ with what I will be working with. This experimental project turned out to be the
 - The templates and static directories are not in sync with how django works
 - Using same code in more than one html in <script> tag. **Should've used seperate js and css files** for each django app and made life easier
 ##### **NOT** mixing different stylesheets taken from different templates and messing things up
+##### Subcategory feature is redundant:
+  The idea behind introducin a sub-category under each category for products was that a product can fall under multiple categories. In that case,
+  the product will have a different sub-category under those categories. For example:
+    **Snacks** and **Diabetic Food** are two categories. The product **Sugar Free Cookies** falls under both **Snacks** and **Diabetic Food**.
+    Under **Snacks**, **Sugar Free Cookies** might have a subcategory of *Cookies* and under **Diabetic Food** it might have a subcategory *Sugar Free Items*.
+  *In short, a product can fall under multiple cateogories. But in our implementation, a product can belong under only a single category, which is definitely
+  not desirable*
+  
+## An incomplete feature:
+### Bundle Offer:
+Admin can create a bundle offer with atmost 3 products and set a price on that offer.
