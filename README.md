@@ -1,5 +1,6 @@
 # About this Project
 ## Overview:
+## Features:
 ### Register:
 - Standard log in and sign up procedure
 ### Home page/ browsing products:
