@@ -84,5 +84,5 @@ with what I will be working with. This experimental project turned out to be the
   
 ## An incomplete feature:
 ### Bundle Offer:
-Admin can create a bundle offer with atmost 3 products and set a price on that offer. The fron end for this feature is complete but due to lack of time,
+Admin can create a bundle offer with atmost 3 products and set a price on that offer. The front end for this feature is complete but due to lack of time,
 the backend was not done
