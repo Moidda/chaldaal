@@ -55,7 +55,7 @@
 
 ## The journey:
 The beginning felt like a maze, with me not knowing how to start, where to go, what to do. I started looking around youtube tutorials trying to 
-get the grasp of how to use django. And even before that, creating a user in oracle was a huge hassle overcoming which took me days, only due to the
+get the grasp of how to use django. And even before that, creating a user in oracle was a huge hassle overcoming which took us days, only due to the
 fact that I was too lazy to work around something new.
 
 After creating schema, installing django, setting up database, I finally decided to open an experimental project following [this](https://www.youtube.com/watch?v=xv_bwpA_aEA&list=PL-51WBLyFTg2vW-_6XBoUpE7vpmoR3ztO&ab_channel=DennisIvy) to get myself familiar
