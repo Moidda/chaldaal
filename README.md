@@ -88,8 +88,8 @@ with what we will be working with. This experimental project turned out to be th
       which will contain the attributes 'CATEGORY_NAME', 'SUBCATEGORY_NAME', 'PRODUCT_ID'. None of the 
       columns of CATEGORY table is necessarily unique.
       
-             PRODUCT                               CATEGORY
-      | PRODUCT_ID | ... |          | PRODUCT_ID | CATEGORY | SUB_CATEGORY |
+             PRODUCT                                  CATEGORY
+      | PRODUCT_ID | ... |          | PRODUCT_ID | CATEGORY_NAME | SUB_CATEGORY_NAME |
     
   
 ## An incomplete feature:
