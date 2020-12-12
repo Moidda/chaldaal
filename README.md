@@ -73,10 +73,10 @@ with what I will be working with. This experimental project turned out to be the
   
   For example:
 
-    SNACKS and DIABETIC FOOD are two categories. 
-    The product SUGAR FREE COOKIES falls under both SNACKS and DIABETIC FOOD.
-    Under SNACKS, SUGAR FREE COOKIES might have a subcategory of "Cookies" and 
-    under DIABETIC FOOD it might have a subcategory "Sugar Free Items"
+      SNACKS and DIABETIC FOOD are two categories. 
+      The product SUGAR FREE COOKIES falls under both SNACKS and DIABETIC FOOD.
+      Under SNACKS, SUGAR FREE COOKIES might have a subcategory of "Cookies" and 
+      under DIABETIC FOOD it might have a subcategory "Sugar Free Items"
     
   *In short, a product can fall under multiple cateogories. But in our implementation, a product can belong under only a single category, which is definitely
   not desirable*
