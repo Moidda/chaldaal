@@ -62,15 +62,12 @@ After creating schema, installing django, setting up database, I finally decided
 with what I will be working with. This experimental project turned out to be the main project later on, which caused me some pain later on.
 
 ## Things I could've done better:
-##### Starting things early (Duh)
-##### Organizing project directory
-- The templates and static directories are not in sync with how django works
-- Using same code in more than one html in <script> tag. **Should've used seperate js and css files** for each django app and made life easier
-  
-##### **NOT** mixing different stylesheets taken from different templates and messing things up
-
-##### Subcategory feature is redundant:
-  
+- ##### Starting things early (Duh)
+- ##### Organizing project directory
+  - The templates and static directories are not in sync with how django works
+  - Using same code in more than one html in <script> tag. **Should've used seperate js and css files** for each django app and made life easier
+- ##### **NOT** mixing different stylesheets taken from different templates and messing things up
+- ##### Subcategory feature is redundant:
   The idea behind introducing a sub-category under each category for products was that a product can fall under multiple categories. In that case,
   the product will have a different sub-category under those categories. 
   
