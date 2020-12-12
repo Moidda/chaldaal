@@ -82,6 +82,15 @@ with what we will be working with. This experimental project turned out to be th
   *In short, a product can fall under multiple cateogories. But in our implementation, a product can belong under only a single category, which is definitely
   not desirable*
   
+  Possible Solution:
+    
+      Instead of making 'CATEGORY' an attribute of 'PRODUCT' entity, 'CATEGORY' could itself be an entity, which will contain the attributes
+      'CATEGORY_NAME', 'SUBCATEGORY_NAME', 'PRODUCT_ID'. None of the columns of CATEGORY table is necessarily unique.
+      
+             PRODUCT                               CATEGORY
+      | PRODUCT_ID | ... |          | PRODUCT_ID | CATEGORY | SUB_CATEGORY |
+    
+  
 ## An incomplete feature:
 ### Bundle Offer:
 Admin can create a bundle offer with atmost 3 products and set a price on that offer. The front end for this feature is complete but due to lack of time,
