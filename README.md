@@ -5,12 +5,9 @@
 ### Home page/ browsing products:
 - Each products are listed according to their category.
 - Once in category, products can be filtered by their sub-category.
-  #### Popular section
-    Contains products with rating > 2
-  #### Flash Sale section
-    Contains products that has an ongoing sale on them
-  #### Covid 19 protection
-    An extra section made in consideration for covid
+  **Popular section:** Contains products with rating > 2
+  **Flash Sale section:** Contains products that has an ongoing sale on them
+  **Covid 19 protection:** An extra section made in consideration for covid
 ### Cart:
 - Customer can add products to the cart. 
 - Once in cart, customer can change the amount of products and then proceed to checkout from here
