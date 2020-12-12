@@ -55,12 +55,12 @@
 
 
 ## The journey:
-The beginning felt like a maze, with me not knowing how to start, where to go, what to do. I started looking around youtube tutorials trying to 
+The beginning felt like a maze, with me not knowing how to start, where to go, what to do. We started looking around youtube tutorials trying to 
 get the grasp of how to use django. And even before that, creating a user in oracle was a huge hassle overcoming which took us days, only due to the
 fact that I was too lazy to work around something new.
 
-After creating schema, installing django, setting up database, I finally decided to open an experimental project following [this](https://www.youtube.com/watch?v=xv_bwpA_aEA&list=PL-51WBLyFTg2vW-_6XBoUpE7vpmoR3ztO&ab_channel=DennisIvy) to get myself familiar
-with what I will be working with. This experimental project turned out to be the main project, which caused me some pain later on.
+After creating schema, installing django, setting up database, I finally decided to open an experimental project following [this](https://www.youtube.com/watch?v=xv_bwpA_aEA&list=PL-51WBLyFTg2vW-_6XBoUpE7vpmoR3ztO&ab_channel=DennisIvy) to get ourself familiar
+with what we will be working with. This experimental project turned out to be the main project, which caused us some pain later on.
 
 ## Things we could've done better:
 - ##### Starting things early (Duh)
