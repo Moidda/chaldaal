@@ -62,7 +62,7 @@ fact that I was too lazy to work around something new.
 After creating schema, installing django, setting up database, I finally decided to open an experimental project following [this](https://www.youtube.com/watch?v=xv_bwpA_aEA&list=PL-51WBLyFTg2vW-_6XBoUpE7vpmoR3ztO&ab_channel=DennisIvy) to get myself familiar
 with what I will be working with. This experimental project turned out to be the main project, which caused me some pain later on.
 
-## Things I could've done better:
+## Things we could've done better:
 - ##### Starting things early (Duh)
 - ##### Organizing project directory
   - The templates and static directories are not in sync with how django works
