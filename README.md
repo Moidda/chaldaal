@@ -23,6 +23,12 @@
 - Customer can edit their details in profile
 - Email and phone no has to be unique
 - Credit points are added to their account automatically, depending on how much they spent
+### Admin:
+#### Insert a new product
+#### Edit product details
+#### Create/End flash sales
+#### Monitor all the transactions of customers
+
 
 ## Framework:
 - Django
