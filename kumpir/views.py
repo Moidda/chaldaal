@@ -21,7 +21,7 @@ def manage_product(request):
 
 
 def insert_product_sql(product_name, unit, units_in_stock, price_per_unit, category, sub_category):
-    sql = 'SELECT MAX(PRODUCT_ID) FROM PRODUCT'
+    sql = 'SELECT NVL(MAX(PRODUCT_ID), 0) FROM PRODUCT'
     cursor.execute(sql)
     result = cursor.fetchall()
     max_id = int(result[0][0])
